@@ -1,96 +1,114 @@
 <template>
-  <div class="w-full relative">
-    <!-- Desktop vertical slider -->
-    <div class="hidden sm:flex max-h-[40rem] swiper-container overflow-hidden">
-      <Swiper
-        :modules="modules"
-        :direction="'vertical'"
-        :loop="true"
-        :autoplay="{ delay: 5000, disableOnInteraction: false }"
-        :navigation="{
-          prevEl: `.custom-prev-${id}`,
-          nextEl: `.custom-next-${id}`
-        }"
-        :slides-per-view="1"
-        class="w-full rounded-xl"
+  <div class="relative w-full" id="default-carousel" data-carousel="slide">
+    <!-- Carousel wrapper -->
+    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+      <!-- Dynamically rendered carousel items -->
+      <div
+        v-for="(product, index) in sliders"
+        :key="index"
+        class="duration-700 ease-in-out transition-all"
+        :class="{ 'block': index === activeIndex, 'hidden': index !== activeIndex }"
+        data-carousel-item
       >
-        <SwiperSlide v-for="(slide, index) in slides" :key="index">
-          <HeroCarouselCard :slide="slide" />
-        </SwiperSlide>
-      </Swiper>
-    </div>
-
-    <!-- Mobile horizontal slider -->
-    <div class="sm:hidden h-[60vh] swiper-container overflow-hidden">
-      <Swiper
-        :modules="modules"
-        :loop="true"
-        :autoplay="{ delay: 5000, disableOnInteraction: false }"
-        :navigation="{
-          prevEl: `.custom-prev-${id}`,
-          nextEl: `.custom-next-${id}`
-        }"
-        :slides-per-view="1"
-        class="w-full"
-      >
-        <SwiperSlide v-for="(slide, index) in slides" :key="index">
-          <HeroCarouselCard :slide="slide" />
-        </SwiperSlide>
-      </Swiper>
-    </div>
-
-    <!-- Overlay Content -->
-    <div class="absolute top-0 left-0 w-full h-full z-30 flex flex-col justify-center">
-      <div class="sm:w-4/5 p-6 sm:px-24 bg-gradient-to-r from-black/40 to-transparent text-white">
-        <h1 class="text-3xl sm:text-5xl font-bold">Department of {{ dept_name }}</h1>
-        <p class="mt-2 text-lg sm:text-xl">Explore more about our department</p>
-        <div class="mt-4">
-          <button class="bg-white text-black px-4 py-2 rounded shadow">Learn More</button>
+        <img
+          :src="product.image"
+          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+          alt="Product Image"
+        />
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-center text-white">
+          <h3 class="text-xl font-semibold">{{ product.name }}</h3>
+          <p class="text-lg">{{ product.description }}</p>
+          <span class="text-lg">{{ product.price }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Navigation Arrows -->
-    <div class="hidden sm:flex flex-col absolute top-0 right-10 h-full justify-between py-36 z-30">
-      <button :class="`custom-prev-${id} p-2 bg-white/30 rounded-full`">
-        <ChevronDownIcon class="w-6 h-6 rotate-180 text-white" />
-      </button>
-      <button :class="`custom-next-${id} p-2 bg-white/30 rounded-full`">
-        <ChevronDownIcon class="w-6 h-6 text-white" />
-      </button>
+    <!-- Slider Indicators -->
+    <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3">
+      <button
+        v-for="(product, index) in sliders"
+        :key="index"
+        class="w-3 h-3 rounded-full bg-white/70"
+        :class="{ 'bg-blue-500': index === activeIndex }"
+        @click="goToSlide(index)"
+        aria-label="'Slide ' + (index + 1)"
+      />
     </div>
+
+    <!-- Previous and Next buttons -->
+    <button
+      type="button"
+      class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+      @click="prevSlide"
+    >
+      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
+        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 6 10">
+          <path d="M5 1 1 5l4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </svg>
+        <span class="sr-only">Previous</span>
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+      @click="nextSlide"
+    >
+      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
+        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 6 10">
+          <path d="m1 9 4-4-4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </svg>
+        <span class="sr-only">Next</span>
+      </span>
+    </button>
   </div>
 </template>
 
 <script setup>
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-// import HeroCarouselCard from './HeroCarouselCard.vue';
-import HeroCarouselCard from '@/components/client_side/layout/SliderCard.vue';
-import { ChevronDownIcon } from '@heroicons/vue/24/outline';
-
-const modules = [Autoplay, Pagination, Navigation];
-const id = Math.random().toString(36).substring(2, 9);
-
-defineProps({
-  dept_name: {
-    type: String,
-    required: true
-  },
-  slides: {
+const props = defineProps({
+  sliders: {
     type: Array,
-    required: true
-  }
-});
-</script>
+    required: true,
+  },
+})
 
-<style scoped>
-.swiper-button-prev,
-.swiper-button-next {
-  color: white;
+const activeIndex = ref(0)
+
+let slideInterval = null
+
+// Go to the next slide
+function nextSlide() {
+  activeIndex.value = (activeIndex.value + 1) % props.sliders.length
 }
-</style>
+
+// Go to the previous slide
+function prevSlide() {
+  activeIndex.value = (activeIndex.value - 1 + props.sliders.length) % props.sliders.length
+}
+
+// Go to a specific slide
+function goToSlide(index) {
+  activeIndex.value = index
+}
+
+// Start the auto-slide functionality
+function startAutoSlide() {
+  slideInterval = setInterval(() => {
+    nextSlide()
+  }, 3000) // Change slide every 3 seconds
+}
+
+// Stop the auto-slide when the component is unmounted
+onBeforeUnmount(() => {
+  if (slideInterval) {
+    clearInterval(slideInterval)
+  }
+})
+
+// Start auto-sliding once the component is mounted
+onMounted(() => {
+  startAutoSlide()
+})
+</script>
