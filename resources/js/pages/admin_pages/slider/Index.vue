@@ -70,14 +70,14 @@ const breadcrumbs: BreadcrumbItem[] = [
               </td>
               <td class="px-4 py-3 text-right flex justify-end gap-2">
                 <!-- Edit Button -->
-                <Link :href="`/sliders/${slider.id}/edit`"
+                <Link :href="`/sliders/${slider.slug}/edit`"
                   class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition">
                 <PenLine class="w-4 h-4 mr-1" />
                 <span class="hidden sm:inline">Edit</span>
                 </Link>
 
                 <!-- Delete Button -->
-                <Link :href="`/sliders/${slider.id}`" method="delete" as="button"
+                <Link :href="`/sliders/${slider.slug}`" method="delete" as="button"
                   class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition">
                 <Trash2 class="w-4 h-4 mr-1" />
                 <span class="hidden sm:inline">Delete</span>

@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sliders', function (Blueprint $table) {
-            $table->id();
+           $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('slug')->unique();  // Ensure slug is unique
             $table->text('description')->nullable();
             $table->string('image');
-            $table->boolean('status')->default(true); 
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
