@@ -61,24 +61,32 @@ class SliderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Slider $slider)
-    {
-        //
-    }
+   public function edit(Slider $slider)
+{
+    
+    return inertia('admin_pages/slider/Edit', [
+        'slider' => $slider
+    ]);
+}
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(SliderUpdateSliderRequest $request, Slider $slider)
-    {
-        //
-    }
+  public function update(SliderUpdateSliderRequest $request, Slider $slider)
+{
+    $slider->update($request->validated());
+
+    return redirect()->route('sliders.index')->with('success', 'Slider updated successfully.');
+}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Slider $slider)
-    {
-        //
-    }
+   public function destroy(Slider $slider)
+{
+    $slider->delete();
+
+    return redirect()->route('sliders.index')->with('success', 'Slider deleted successfully.');
+}
 }
