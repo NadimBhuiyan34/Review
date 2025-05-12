@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import { route } from 'ziggy-js'
 
 const mobileMenuOpen = ref(false)
 const categoryOpen = ref(false)
@@ -28,7 +29,7 @@ const categoryOpen = ref(false)
 
       <!-- Icons -->
       <div class="hidden md:flex items-center gap-6">
-        <Link href="#" class="text-gray-600 hover:text-blue-600">Login</Link>
+        <Link :href="route('login')" class="text-gray-600 hover:text-blue-600">Login</Link>
         <Link href="#" class="relative hover:text-blue-600">
           ❤️
           <span class="absolute -top-2 -right-2 text-xs bg-red-500 text-white px-1 rounded-full">3</span>
@@ -89,7 +90,7 @@ const categoryOpen = ref(false)
 
         <!-- Icons in mobile -->
         <div class="pt-4 flex items-center justify-between">
-          <Link href="#" class="text-gray-600 hover:text-blue-600">Login</Link>
+          <Link :href="route('login')" class="text-gray-600 hover:text-blue-600">Login</Link>
           <div class="flex gap-4">
             <Link href="#" class="relative hover:text-blue-600">❤️<span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">3</span></Link>
             <Link href="#" class="relative hover:text-blue-600">🛒<span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span></Link>
