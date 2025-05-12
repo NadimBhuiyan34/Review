@@ -32,10 +32,10 @@ const breadcrumbs: BreadcrumbItem[] = [
     <Head title="Slider-Create" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="p-6 w-full mx-auto bg-white rounded shadow">
+        <div class="p-6 w-full mx-auto bg-gray-100 rounded shadow">
             <h1 class="text-2xl font-bold mb-6">Create New Slider</h1>
 
-            <form @submit.prevent="submit" class="space-y-5">
+            <form @submit.prevent="submit" class="space-y-5 bg-white p-4 shadow-xl rounded-2xl">
                 <!-- Name -->
                 <div>
                     <label class="block text-gray-700 font-medium mb-1">Name</label>

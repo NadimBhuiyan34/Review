@@ -31,7 +31,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Slider" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="p-4 sm:p-6 w-full mx-auto space-y-6 bg-blue-50">
+    <div class="p-4 sm:p-6 w-full mx-auto space-y-6 bg-gray-100">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <h1 class="text-2xl font-bold text-gray-800">Sliders</h1>
 
@@ -47,7 +47,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
       <div class="overflow-x-auto rounded-lg shadow bg-white">
         <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
-          <thead class="bg-gray-50">
+          <thead class="bg-blue-100">
             <tr>
               <th class="px-4 py-3 font-semibold text-gray-600">Image</th>
               <th class="px-4 py-3 font-semibold text-gray-600">Name</th>
