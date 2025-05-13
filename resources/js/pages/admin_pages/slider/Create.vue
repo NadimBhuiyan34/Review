@@ -30,7 +30,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 <template>
 
     <Head title="Slider-Create" />
-
+<!-- create page -->
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="p-6 w-full mx-auto bg-gray-100 rounded shadow">
             <h1 class="text-2xl font-bold mb-6">Create New Slider</h1>
