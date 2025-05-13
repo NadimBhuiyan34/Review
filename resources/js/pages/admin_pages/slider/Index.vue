@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { defineProps, ref, watch } from 'vue';
-import { router, Link } from '@inertiajs/vue3';
+import { router, Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
 import { type BreadcrumbItem } from '@/types';
 import { Trash2, PenLine } from 'lucide-vue-next';
 
-// Define a more specific type for the sliders prop
 interface Slider {
-  id: number;
+  id: string;
   name: string;
   description: string;
   image: string;
@@ -17,25 +15,36 @@ interface Slider {
 }
 
 const props = defineProps<{
-  sliders: Slider[];
+  sliders: {
+    data: Slider[];
+    current_page: number;
+    last_page: number;
+    total: number;
+    from: number;
+    to: number;
+  };
   filters: { search?: string };
 }>();
 
-// State management for search input and loading state
 const search = ref(props.filters?.search || '');
 const isLoading = ref(false);
 
-// Debounced search handling
 watch(search, async (value) => {
   isLoading.value = true;
-  await router.get('/sliders', { search: value }, { 
-    preserveState: true, 
-    replace: true, 
-    onFinish: () => isLoading.value = false 
+  await router.get('/sliders', { search: value }, {
+    preserveState: true,
+    replace: true,
+    onFinish: () => isLoading.value = false
   });
 }, { immediate: true });
 
-// Breadcrumbs for navigation
+const handlePaginate = (page: number) => {
+  router.get('/sliders', { search: search.value, page }, {
+    preserveState: true,
+    replace: true,
+  });
+};
+
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Slider', href: '/sliders' },
 ];
@@ -43,30 +52,29 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 <template>
   <Head title="Sliders" />
-  
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="p-4 sm:p-6 w-full mx-auto space-y-6 bg-gray-100">
-      <!-- Header Section -->
+      
+      <!-- Header -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <h1 class="text-2xl font-bold text-gray-800">Sliders</h1>
-
-        <!-- Search and Add New Slider Button -->
         <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-          <input 
-            v-model="search" 
-            type="text" 
-            placeholder="Search by name..." 
-            class="w-full sm:w-64 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" 
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Search by name..."
+            class="w-full sm:w-64 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           />
-          <Link 
-            href="/sliders/create" 
-            class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium">
+          <Link
+            href="/sliders/create"
+            class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium"
+          >
             + Add New Slider
           </Link>
         </div>
       </div>
 
-      <!-- Table Section -->
+      <!-- Table -->
       <div class="overflow-x-auto rounded-lg shadow bg-white">
         <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
           <thead class="bg-blue-100">
@@ -79,8 +87,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
-            <!-- Loop through sliders -->
-            <tr v-for="slider in sliders" :key="slider.id" class="hover:bg-gray-50 transition">
+            <tr v-for="slider in props.sliders.data" :key="slider.id" class="hover:bg-gray-50 transition">
               <td class="px-4 py-3">
                 <img :src="slider.image" :alt="`Image of ${slider.name}`" class="w-20 h-14 object-cover rounded shadow-sm" />
               </td>
@@ -92,33 +99,70 @@ const breadcrumbs: BreadcrumbItem[] = [
                 </span>
               </td>
               <td class="px-4 py-3 text-right flex justify-end gap-2">
-                <!-- Edit Button -->
-                <Link :href="`/sliders/${slider.slug}/edit`"
-                  class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition">
+                <Link
+                  :href="`/sliders/${slider.slug}/edit`"
+                  class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition"
+                >
                   <PenLine class="w-4 h-4 mr-1" />
                   <span class="hidden sm:inline">Edit</span>
                 </Link>
-
-                <!-- Delete Button with Confirmation -->
-                <Link :href="`/sliders/${slider.slug}`" method="delete" as="button"
-                  class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition">
+                <Link
+                  :href="`/sliders/${slider.slug}`"
+                  method="delete"
+                  as="button"
+                  class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition"
+                >
                   <Trash2 class="w-4 h-4 mr-1" />
                   <span class="hidden sm:inline">Delete</span>
                 </Link>
               </td>
             </tr>
-
-            <!-- Empty State if no sliders are found -->
-            <tr v-if="sliders.length === 0">
-              <td colspan="5" class="text-center py-6 text-gray-500">
-                No sliders found.
-              </td>
+            <tr v-if="props.sliders.data.length === 0">
+              <td colspan="5" class="text-center py-6 text-gray-500">No sliders found.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Loading Indicator -->
+      <!-- Pagination -->
+      <div v-if="props.sliders.last_page > 1" class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4">
+        <div class="text-sm text-gray-500">
+          Showing {{ props.sliders.from }} to {{ props.sliders.to }} of {{ props.sliders.total }} results
+        </div>
+        <div class="flex flex-wrap gap-1">
+          <button
+            v-if="props.sliders.current_page > 1"
+            @click="handlePaginate(props.sliders.current_page - 1)"
+            class="px-3 py-1 border rounded text-sm hover:bg-gray-200 transition"
+          >
+            Prev
+          </button>
+
+          <button
+            v-for="page in props.sliders.last_page"
+            :key="page"
+            @click="handlePaginate(page)"
+            :class="[
+              'px-3 py-1 border rounded text-sm',
+              page === props.sliders.current_page
+                ? 'bg-blue-600 text-white'
+                : 'hover:bg-gray-100 text-gray-700'
+            ]"
+          >
+            {{ page }}
+          </button>
+
+          <button
+            v-if="props.sliders.current_page < props.sliders.last_page"
+            @click="handlePaginate(props.sliders.current_page + 1)"
+            class="px-3 py-1 border rounded text-sm hover:bg-gray-200 transition"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading Spinner -->
       <div v-if="isLoading" class="flex justify-center items-center py-4">
         <span class="text-gray-500">Loading...</span>
       </div>

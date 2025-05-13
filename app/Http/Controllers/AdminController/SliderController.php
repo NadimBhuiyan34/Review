@@ -24,7 +24,7 @@ class SliderController extends Controller
             $q->where('name', 'like', '%' . $request->search . '%')
         )
         ->latest()
-        ->get();
+        ->paginate(5);
 
     return Inertia::render('admin_pages/slider/Index', [
         'sliders' => $sliders,
