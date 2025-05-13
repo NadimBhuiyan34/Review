@@ -19,7 +19,7 @@ const form = useForm({
 })
 
 const submit = () => {
-  form.put(`/sliders/${props.slider.id}`)
+  form.put(`/sliders/${props.slider.slug}`)
 }
 
 const breadcrumbs: BreadcrumbItem[] = [

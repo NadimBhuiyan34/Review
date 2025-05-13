@@ -75,6 +75,7 @@ class SliderController extends Controller
      */
   public function update(SliderUpdateSliderRequest $request, Slider $slider)
 {
+     
     $slider->update($request->validated());
 
     return redirect()->route('sliders.index')->with('success', 'Slider updated successfully.');

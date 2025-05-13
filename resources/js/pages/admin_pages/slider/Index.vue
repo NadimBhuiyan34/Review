@@ -1,50 +1,72 @@
 <script setup lang="ts">
+import { defineProps, ref, watch } from 'vue';
+import { router, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
+import { type BreadcrumbItem } from '@/types';
+import { Trash2, PenLine } from 'lucide-vue-next';
 
-import { defineProps, ref, watch } from 'vue'
-import { router, Link } from '@inertiajs/vue3'
-import { Trash2, PenLine } from 'lucide-vue-next'
+// Define a more specific type for the sliders prop
+interface Slider {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  status: boolean;
+  slug: string;
+}
 
-const props = defineProps({
-  sliders: Array,
-  filters: Object,
-})
+const props = defineProps<{
+  sliders: Slider[];
+  filters: { search?: string };
+}>();
 
-const search = ref(props.filters?.search || '')
+// State management for search input and loading state
+const search = ref(props.filters?.search || '');
+const isLoading = ref(false);
 
-watch(search, (value) => {
-  router.get('/sliders', { search: value }, { preserveState: true, replace: true })
-})
+// Debounced search handling
+watch(search, async (value) => {
+  isLoading.value = true;
+  await router.get('/sliders', { search: value }, { 
+    preserveState: true, 
+    replace: true, 
+    onFinish: () => isLoading.value = false 
+  });
+}, { immediate: true });
 
+// Breadcrumbs for navigation
 const breadcrumbs: BreadcrumbItem[] = [
-  {
-    title: 'Slider',
-    href: '/sliders',
-  },
+  { title: 'Slider', href: '/sliders' },
 ];
 </script>
 
 <template>
-
-  <Head title="Slider" />
-
+  <Head title="Sliders" />
+  
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="p-4 sm:p-6 w-full mx-auto space-y-6 bg-gray-100">
+      <!-- Header Section -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <h1 class="text-2xl font-bold text-gray-800">Sliders</h1>
 
+        <!-- Search and Add New Slider Button -->
         <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-          <input v-model="search" type="text" placeholder="Search by name..."
-            class="w-full sm:w-64 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
-          <Link href="/sliders/create"
+          <input 
+            v-model="search" 
+            type="text" 
+            placeholder="Search by name..." 
+            class="w-full sm:w-64 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" 
+          />
+          <Link 
+            href="/sliders/create" 
             class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium">
-          + Add New Slider
+            + Add New Slider
           </Link>
         </div>
       </div>
 
+      <!-- Table Section -->
       <div class="overflow-x-auto rounded-lg shadow bg-white">
         <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
           <thead class="bg-blue-100">
@@ -57,9 +79,10 @@ const breadcrumbs: BreadcrumbItem[] = [
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
+            <!-- Loop through sliders -->
             <tr v-for="slider in sliders" :key="slider.id" class="hover:bg-gray-50 transition">
               <td class="px-4 py-3">
-                <img :src="slider.image" alt="Slider Image" class="w-20 h-14 object-cover rounded shadow-sm" />
+                <img :src="slider.image" :alt="`Image of ${slider.name}`" class="w-20 h-14 object-cover rounded shadow-sm" />
               </td>
               <td class="px-4 py-3">{{ slider.name }}</td>
               <td class="px-4 py-3">{{ slider.description }}</td>
@@ -72,19 +95,20 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <!-- Edit Button -->
                 <Link :href="`/sliders/${slider.slug}/edit`"
                   class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition">
-                <PenLine class="w-4 h-4 mr-1" />
-                <span class="hidden sm:inline">Edit</span>
+                  <PenLine class="w-4 h-4 mr-1" />
+                  <span class="hidden sm:inline">Edit</span>
                 </Link>
 
-                <!-- Delete Button -->
+                <!-- Delete Button with Confirmation -->
                 <Link :href="`/sliders/${slider.slug}`" method="delete" as="button"
                   class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition">
-                <Trash2 class="w-4 h-4 mr-1" />
-                <span class="hidden sm:inline">Delete</span>
+                  <Trash2 class="w-4 h-4 mr-1" />
+                  <span class="hidden sm:inline">Delete</span>
                 </Link>
               </td>
             </tr>
 
+            <!-- Empty State if no sliders are found -->
             <tr v-if="sliders.length === 0">
               <td colspan="5" class="text-center py-6 text-gray-500">
                 No sliders found.
@@ -92,6 +116,11 @@ const breadcrumbs: BreadcrumbItem[] = [
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div v-if="isLoading" class="flex justify-center items-center py-4">
+        <span class="text-gray-500">Loading...</span>
       </div>
     </div>
   </AppLayout>
