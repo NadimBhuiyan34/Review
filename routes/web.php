@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController\CategoryController;
 use App\Http\Controllers\AdminController\SliderController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,6 +15,7 @@ Route::get('dashboard', function () {
 
 
 Route::resource('sliders', SliderController::class);
+Route::resource('categories', CategoryController::class); 
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

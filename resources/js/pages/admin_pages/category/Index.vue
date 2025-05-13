@@ -1,0 +1,108 @@
+<script setup lang="ts">
+import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/vue3';
+
+import { defineProps, ref, watch } from 'vue'
+import { router, Link } from '@inertiajs/vue3'
+import { Trash2, PenLine } from 'lucide-vue-next'
+
+const props = defineProps({
+  categories: Array,
+  filters: Object,
+})
+
+const search = ref(props.filters?.search || '')
+
+watch(search, (value) => {
+  router.get('/categories', { search: value }, { preserveState: true, replace: true })
+})
+
+const breadcrumbs: BreadcrumbItem[] = [
+  {
+    title: 'Category',
+    href: '/categories',
+  },
+];
+</script>
+
+<template>
+
+  <Head title="Category" />
+
+  <AppLayout :breadcrumbs="breadcrumbs">
+    <div class="p-4 sm:p-6 w-full mx-auto space-y-6 bg-gray-100">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <h1 class="text-2xl font-bold text-gray-800">Categories</h1>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Search by name..."
+            class="w-full sm:w-64 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          />
+          <Link
+            href="categories/create"
+            class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium"
+          >
+            + Add New Category
+          </Link>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto rounded-lg shadow bg-white">
+        <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
+          <thead class="bg-blue-100">
+            <tr>
+              <th class="px-4 py-3 font-semibold text-gray-600">Name</th>
+              <th class="px-4 py-3 font-semibold text-gray-600">Description</th>
+              <th class="px-4 py-3 font-semibold text-gray-600">Status</th>
+              <th class="px-4 py-3 font-semibold text-right text-gray-600">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr v-for="category in categories" :key="category.id" class="hover:bg-gray-50 transition">
+              <td class="px-4 py-3">{{ category.name }}</td>
+              <td class="px-4 py-3">{{ category.description }}</td>
+              <td class="px-4 py-3">
+                <span :class="category.status ? 'text-green-600' : 'text-red-500'" class="font-medium">
+                  {{ category.status ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right flex justify-end gap-2">
+                <!-- Edit Button -->
+                <Link
+                  :href="`/categories/${category.slug}/edit`"
+                  class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition"
+                >
+                  <PenLine class="w-4 h-4 mr-1" />
+                  <span class="hidden sm:inline">Edit</span>
+                </Link>
+
+                <!-- Delete Button -->
+                <Link
+                  :href="`/categories/${category.slug}`"
+                  method="delete"
+                  as="button"
+                  class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition"
+                >
+                  <Trash2 class="w-4 h-4 mr-1" />
+                  <span class="hidden sm:inline">Delete</span>
+                </Link>
+              </td>
+            </tr>
+
+            <tr v-if="categories.length === 0">
+              <td colspan="4" class="text-center py-6 text-gray-500">
+                No categories found.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </AppLayout>
+</template> 
