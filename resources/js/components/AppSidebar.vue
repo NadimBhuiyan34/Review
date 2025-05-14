@@ -24,6 +24,11 @@ const mainNavItems: NavItem[] = [
         href: '/categories',
         icon: LayoutGrid,
     },
+    {
+        title: 'Band',
+        href: '/brands',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
