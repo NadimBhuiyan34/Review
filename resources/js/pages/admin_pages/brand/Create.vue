@@ -7,14 +7,14 @@ import { Link, router } from '@inertiajs/vue3'
 import { useForm } from '@inertiajs/vue3'
 import { Undo2, PenLine } from 'lucide-vue-next'
 
-;
+    ;
 interface Brands {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  status: boolean;
-  slug: string;
+    id: string;
+    name: string;
+    description: string;
+    image: string;
+    status: boolean;
+    slug: string;
 }
 const form = useForm({
     name: '',
@@ -39,8 +39,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 <template>
 
     <Head title="Brand-Create" />
-<!-- create page -->
-    <AppLayout :breadcrumbs="breadcrumbs">     
+    <!-- create page -->
+    <AppLayout :breadcrumbs="breadcrumbs">
         <div class="p-6 w-full mx-auto bg-gray-100 rounded shadow">
             <h1 class="text-2xl font-bold mb-6">Create New Brand</h1>
 
@@ -83,7 +83,9 @@ const breadcrumbs: BreadcrumbItem[] = [
                         :disabled="form.processing">
                         Save
                     </button>
-                    <Link href="/brands" class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition">  <Undo2 class="w-4 h-4 mr-1" /> Back</Link>
+                    <Link href="/brands"
+                        class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition">
+                    <Undo2 class="w-4 h-4 mr-1" /> Back</Link>
                 </div>
             </form>
         </div>

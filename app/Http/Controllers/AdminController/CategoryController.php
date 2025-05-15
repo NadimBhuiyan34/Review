@@ -22,7 +22,7 @@ class CategoryController extends Controller
             $q->where('name', 'like', "%{$request->search}%")
         )
         ->latest()
-        ->get();
+        ->paginate(5);
 
     return Inertia::render('admin_pages/category/Index', [
         'categories' => $categories,

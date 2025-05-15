@@ -22,8 +22,8 @@ class BrandController extends Controller
             $q->where('name', 'like', "%{$request->search}%")
         )
         ->latest()
-        ->paginate(10)
-        ->withQueryString();
+        ->paginate(10);
+    
 
     return Inertia::render('admin_pages/brand/Index', [
         'brands' => $brands,

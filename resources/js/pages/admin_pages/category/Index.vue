@@ -17,7 +17,7 @@ interface Category {
 
 const props = defineProps<{
   categories: {
-    data: Slider[];
+    data: Category[];
     current_page: number;
     last_page: number;
     total: number;
@@ -89,7 +89,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
-            <tr v-for="category in categories" :key="category.id" class="hover:bg-gray-50 transition">
+            <tr v-for="category in props.categories.data" :key="category.id" class="hover:bg-gray-50 transition">
               <td class="px-4 py-3">{{ category.name }}</td>
               <td class="px-4 py-3">{{ category.description }}</td>
               <td class="px-4 py-3">
@@ -120,7 +120,7 @@ const breadcrumbs: BreadcrumbItem[] = [
               </td>
             </tr>
 
-            <tr v-if="categories.length === 0">
+            <tr v-if="categories.data.length === 0">
               <td colspan="4" class="text-center py-6 text-gray-500">
                 No categories found.
               </td>

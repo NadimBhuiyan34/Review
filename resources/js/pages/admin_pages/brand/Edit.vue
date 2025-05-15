@@ -8,8 +8,11 @@ import { Undo2, PenLine } from 'lucide-vue-next';
 
 // Define props to accept the existing brand data
 const props = defineProps({
-  brand: Object,
-});
+  brand: {
+    type: Object,
+    required: true,
+  },
+})
 
 // Define the form with preloaded data
 const form = useForm({
