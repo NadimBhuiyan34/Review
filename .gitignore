@@ -22,13 +22,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-resources/js/pages/admin_pages/category/Create.vue
-routes/web.php
-resources/js/pages/admin_pages/brand/Index.vue
-resources/js/pages/admin_pages/brand/Edit.vue
-resources/js/pages/admin_pages/brand/Create.vue
-resources/js/components/AppSidebar.vue
-app/Models/Brand.php
-app/Http/Requests/AdminRequest/Brand/UpdateBrandRequest.php
-app/Http/Requests/AdminRequest/Brand/StoreBrandRequest.php
-app/Http/Controllers/AdminController/BrandController.php
+
