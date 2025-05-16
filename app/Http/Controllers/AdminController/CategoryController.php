@@ -74,7 +74,8 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
-    return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+    return redirect()->route('categories.index')
+    ->with('success', 'Category updated successfully.');
     }
 
     /**
@@ -84,6 +85,7 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-    return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+    return redirect()->route('categories.index')
+    ->with('success', 'Category deleted successfully.');
     }
 }
