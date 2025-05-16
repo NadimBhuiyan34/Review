@@ -25,6 +25,8 @@ class UpdateCategoryRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // optional image, max 2MB
+            'parent_id' => 'nullable|uuid|exists:categories,id',
         ];
     }
 }

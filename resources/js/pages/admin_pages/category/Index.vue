@@ -11,8 +11,14 @@ interface Category {
   id: string;
   name: string;
   description: string;
+  image: string;
   status: boolean;
   slug: string;
+
+  category_parent?: {
+    id: string;
+    name: string;
+  } | null;
 }
 
 const props = defineProps<{
@@ -62,17 +68,11 @@ const breadcrumbs: BreadcrumbItem[] = [
         <h1 class="text-2xl font-bold text-gray-800">Categories</h1>
 
         <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-          <input
-            v-model="search"
-            type="text"
-            placeholder="Search by name..."
-            class="w-full sm:w-64 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-          />
-          <Link
-            href="categories/create"
-            class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium"
-          >
-            + Add New Category
+          <input v-model="search" type="text" placeholder="Search by name..."
+            class="w-full sm:w-64 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
+          <Link href="categories/create"
+            class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium">
+          + Add New Category
           </Link>
         </div>
       </div>
@@ -82,16 +82,28 @@ const breadcrumbs: BreadcrumbItem[] = [
         <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
           <thead class="bg-blue-100">
             <tr>
+              <th class="px-4 py-3 font-semibold text-gray-600">Image</th>
               <th class="px-4 py-3 font-semibold text-gray-600">Name</th>
               <th class="px-4 py-3 font-semibold text-gray-600">Description</th>
+              <th class="px-4 py-3 font-semibold text-gray-600">Parent</th>
               <th class="px-4 py-3 font-semibold text-gray-600">Status</th>
               <th class="px-4 py-3 font-semibold text-right text-gray-600">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
             <tr v-for="category in props.categories.data" :key="category.id" class="hover:bg-gray-50 transition">
+              <td class="px-4 py-3">
+                <img :src="category.image" :alt="`Image of ${category.name}`"
+                  class="w-20 h-14 object-cover rounded shadow-sm" />
+              </td>
               <td class="px-4 py-3">{{ category.name }}</td>
               <td class="px-4 py-3">{{ category.description }}</td>
+              <td class="px-4 py-3">
+                {{ category.category_parent?.name ?? 'Root' }}
+              </td>
+
+
+
               <td class="px-4 py-3">
                 <span :class="category.status ? 'text-green-600' : 'text-red-500'" class="font-medium">
                   {{ category.status ? 'Active' : 'Inactive' }}
@@ -99,23 +111,17 @@ const breadcrumbs: BreadcrumbItem[] = [
               </td>
               <td class="px-4 py-3 text-right flex justify-end gap-2">
                 <!-- Edit Button -->
-                <Link
-                  :href="`/categories/${category.slug}/edit`"
-                  class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition"
-                >
-                  <PenLine class="w-4 h-4 mr-1" />
-                  <span class="hidden sm:inline">Edit</span>
+                <Link :href="`/categories/${category.slug}/edit`"
+                  class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition">
+                <PenLine class="w-4 h-4 mr-1" />
+                <span class="hidden sm:inline">Edit</span>
                 </Link>
 
                 <!-- Delete Button -->
-                <Link
-                  :href="`/categories/${category.slug}`"
-                  method="delete"
-                  as="button"
-                  class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition"
-                >
-                  <Trash2 class="w-4 h-4 mr-1" />
-                  <span class="hidden sm:inline">Delete</span>
+                <Link :href="`/categories/${category.slug}`" method="delete" as="button"
+                  class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition">
+                <Trash2 class="w-4 h-4 mr-1" />
+                <span class="hidden sm:inline">Delete</span>
                 </Link>
               </td>
             </tr>
@@ -130,4 +136,4 @@ const breadcrumbs: BreadcrumbItem[] = [
       </div>
     </div>
   </AppLayout>
-</template> 
+</template>

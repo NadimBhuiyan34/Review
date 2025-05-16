@@ -12,13 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary(); // UUID instead of auto-increment
+
             $table->string('name');
-            $table->string('slug')->unique(); // Ensure slug is unique
+            $table->string('image')->nullable();
             $table->text('description')->nullable();
-            $table->boolean('status')->default(true);
+            $table->string('slug')->unique();
+
+            // parent_id is also UUID
+            $table->uuid('parent_id')->nullable();
+            $table->boolean('status')->default(true); 
+
             $table->timestamps();
 
+            // Foreign key referencing same table (UUID)
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
         });
     }
 

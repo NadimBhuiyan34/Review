@@ -49,6 +49,7 @@ return new class extends Migration
             // Optional JSON Fields
             $table->json('tags')->nullable();          // ["new", "summer", "sale"]
             $table->json('specifications')->nullable(); // {"color":"red", "material":"cotton"}
+            $table->boolean('status')->default(true); 
 
             $table->softDeletes();
             $table->timestamps();

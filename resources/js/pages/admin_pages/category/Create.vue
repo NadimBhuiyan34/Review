@@ -9,8 +9,23 @@ import { Undo2, PenLine } from 'lucide-vue-next'
 const form = useForm({
   name: '',
   description: '',
+  parent_id: '',
+  image: '',
   status: true
 })
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  status: boolean;
+  slug: string;
+  parent_id?: string | null;
+}
+
+const props = defineProps<{
+  categories: Category[];
+}>();
+
 
 const submit = () => {
   form.post('/categories')
@@ -48,6 +63,27 @@ const breadcrumbs: BreadcrumbItem[] = [
           <textarea v-model="form.description" rows="4"
             class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
           <p v-if="form.errors.description" class="text-red-600 text-sm mt-1">{{ form.errors.description }}</p>
+        </div>
+
+        <!-- Category Image URL -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Category Image URL</label>
+          <input v-model="form.image" type="text" placeholder="https://example.com/image.jpg"
+            class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <p v-if="form.errors.image" class="text-red-600 text-sm mt-1">{{ form.errors.image }}</p>
+        </div>
+
+        <!-- Parent Category -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Parent Category</label>
+          <select v-model="form.parent_id"
+            class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <option value="">-- None (Main Category) --</option>
+            <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+              {{ cat.name }}
+            </option>
+          </select>
+          <p v-if="form.errors.parent_id" class="text-red-600 text-sm mt-1">{{ form.errors.parent_id }}</p>
         </div>
 
         <!-- Status -->

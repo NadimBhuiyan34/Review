@@ -16,24 +16,35 @@ class Category extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['name', 'slug', 'description', 'status'];
+    protected $fillable = ['name', 'slug', 'description', 'status', 'image', 'parent_id'];
 
     protected $casts = [
         'status' => 'boolean',
     ];
 
-    // route model binding এর জন্য slug ব্যবহার
+
     public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    // slug কিভাবে তৈরি হবে
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug')
             ->doNotGenerateSlugsOnUpdate();
+    }
+
+
+    public function categoryParent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function categoryChild()
+    {
+        return $this->hasMany(self::class, 'parent_id');
     }
 }

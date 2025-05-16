@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full" id="default-carousel" data-carousel="slide">
+  <div class="relative w-full mt-5" id="default-carousel" data-carousel="slide">
     <!-- Carousel wrapper -->
     <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
       <!-- Dynamically rendered carousel items -->

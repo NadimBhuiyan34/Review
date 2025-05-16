@@ -25,6 +25,8 @@ class StoreCategoryRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|boolean',
+            'image' => 'nullable|url', 
+            'parent_id' => 'nullable|uuid|exists:categories,id',
         ];
     }
 }

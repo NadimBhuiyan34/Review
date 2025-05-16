@@ -10,28 +10,17 @@ import FlashDeals from '@/components/client_side/home/FlashDeals.vue'
 import WhyChooseUs from '@/components/client_side/home/ChooseUs.vue'
 import Testimonials from '@/components/client_side/home/Testimonials.vue'
 import NewsletterSignup from '@/components/client_side/home/NewsletterSignup.vue'
+import { defineProps, ref, watch } from 'vue'
 
-// Slider data
-const dynamicProducts = [
-  {
-    name: 'Product 1',
-    description: 'This is a great product',
-    price: '$49.99',
-    image: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/627ab1121502531.60c775945f4bf.png',
-  },
-  {
-    name: 'Product 2',
-    description: 'Another awesome product',
-    price: '$69.99',
-    image: 'https://img.freepik.com/free-psd/black-friday-super-sale-facebook-cover-banner-template_120329-5177.jpg?semt=ais_hybrid&w=740',
-  },
-  {
-    name: 'Product 3',
-    description: 'Will make your life easier',
-    price: '$89.99',
-    image: 'https://img.freepik.com/free-psd/black-friday-super-sale-web-banner-template_120329-3862.jpg?semt=ais_hybrid&w=740',
-  },
-]
+ 
+ 
+
+const props = defineProps<{
+
+  sliders: any[];
+
+}>();
+
 
 const products = [
   {
@@ -141,7 +130,7 @@ const testimonials = [
   <AppLayout>
     <section class="max-w-7xl mx-auto ">
       <!-- Hero / Slider -->
-      <Slider :sliders="dynamicProducts" />
+      <Slider :sliders="sliders" />
 
       <!-- Featured Products -->
       <FeaturedProduct :products="products" />

@@ -18,16 +18,21 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $categories = Category::query()
-        ->when($request->search, fn ($q) =>
-            $q->where('name', 'like', "%{$request->search}%")
-        )
-        ->latest()
-        ->paginate(5);
+            ->with(['categoryParent:id,name']) // Load only 'id' and 'name' fields from parent
+            ->when(
+                $request->search,
+                fn($q) =>
+                $q->where('name', 'like', "%{$request->search}%")
+            )
+            ->latest()
+            ->paginate(5);
 
-    return Inertia::render('admin_pages/category/Index', [
-        'categories' => $categories,
-        'filters' => $request->only('search'),
-    ]);
+
+        
+        return Inertia::render('admin_pages/category/Index', [
+            'categories' => $categories,
+            'filters' => $request->only('search'),
+        ]);
     }
 
     /**
@@ -35,7 +40,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin_pages/category/Create');
+        $categories = Category::whereNull('parent_id')->get();
+        return Inertia::render('admin_pages/category/Create', ['categories' => $categories]);
     }
 
     /**
@@ -43,10 +49,11 @@ class CategoryController extends Controller
      */
     public function store(CategoryStoreCategoryRequest $request)
     {
-         Category::create($request->validated());
 
-         return redirect()->route('categories.index')
-         ->with('success', 'Category created successfully.');
+        Category::create($request->validated());
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Category created successfully.');
     }
 
     /**
@@ -62,7 +69,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return Inertia::render('admin_pages/category/Edit',[
+        return Inertia::render('admin_pages/category/Edit', [
             'category' => $category
         ]);
     }
@@ -74,7 +81,7 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
-    return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**
@@ -84,6 +91,6 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-    return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 }
