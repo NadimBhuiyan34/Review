@@ -1,66 +1,99 @@
 <template>
-  <div class="relative w-full mt-5" id="default-carousel" data-carousel="slide">
-    <!-- Carousel wrapper -->
-    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-      <!-- Dynamically rendered carousel items -->
-      <div
-        v-for="(product, index) in sliders"
-        :key="index"
-        class="duration-700 ease-in-out transition-all"
-        :class="{ 'block': index === activeIndex, 'hidden': index !== activeIndex }"
-        data-carousel-item
+  <div class="relative w-full max-w-7xl mx-auto overflow-hidden rounded-lg shadow-2xl select-none mt-5">
+    <!-- Slide container -->
+    <div class="relative h-[400px] md:h-[500px]">
+      <transition-group
+        name="slide-fade"
+        tag="div"
+        class="relative h-full"
       >
-        <img
-          :src="product.image"
-          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-          alt="Product Image"
-        />
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-center text-white">
-          <h3 class="text-xl font-semibold">{{ product.name }}</h3>
-          <p class="text-lg">{{ product.description }}</p>
-          <span class="text-lg">{{ product.price }}</span>
+        <div
+          v-for="(slide, idx) in sliders"
+          :key="slide.id || idx"
+          v-show="idx === activeIndex"
+          class="absolute inset-0 w-full h-full flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between bg-black"
+          aria-live="polite"
+        >
+          <!-- Image -->
+          <img
+            :src="slide.image"
+            alt="Slide Image"
+            class="absolute inset-0 w-full h-full  object-cover brightness-75 transition-transform duration-700 ease-in-out hover:scale-110"
+            draggable="false"
+          />
+
+          <!-- Overlay content -->
+          <div
+            class="relative z-10 px-6 md:px-16 py-12 md:py-24 max-w-xl text-white drop-shadow-lg h-full mx-auto"
+          >
+            <h2 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
+              {{ slide.name }}
+            </h2>
+            <p class="text-lg md:text-xl mb-6 max-w-lg">
+              {{ slide.description }}
+            </p>
+            
+            <button
+              class="inline-block bg-yellow-500 hover:bg-indigo-700 transition text-white font-semibold py-3 px-10 rounded-full shadow-lg transform hover:-translate-y-1"
+            >
+              Shop Now
+            </button>
+          </div>
         </div>
+      </transition-group>
+
+      <!-- Navigation arrows -->
+      <button
+        @click="prevSlide"
+        aria-label="Previous Slide"
+        class="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 text-white p-3 rounded-full shadow-lg transition z-20"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          viewBox="0 0 24 24"
+        >
+          <path d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <button
+        @click="nextSlide"
+        aria-label="Next Slide"
+        class="absolute top-1/2 right-4 md:right-8 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 text-white p-3 rounded-full shadow-lg transition z-20"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          viewBox="0 0 24 24"
+        >
+          <path d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+
+      <!-- Slide indicators -->
+      <div
+        class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-4 z-20"
+      >
+        <button
+          v-for="(slide, idx) in sliders"
+          :key="'indicator-' + idx"
+          @click="goToSlide(idx)"
+          :class="[
+            'w-4 h-4 rounded-full border-2 border-white transition-colors',
+            idx === activeIndex ? 'bg-indigo-500 border-indigo-500' : 'bg-transparent hover:bg-indigo-400 hover:border-indigo-400'
+          ]"
+          :aria-label="'Go to slide ' + (idx + 1)"
+        ></button>
       </div>
     </div>
-
-    <!-- Slider Indicators -->
-    <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3">
-      <button
-        v-for="(product, index) in sliders"
-        :key="index"
-        class="w-3 h-3 rounded-full bg-white/70"
-        :class="{ 'bg-blue-500': index === activeIndex }"
-        @click="goToSlide(index)"
-        aria-label="'Slide ' + (index + 1)"
-      />
-    </div>
-
-    <!-- Previous and Next buttons -->
-    <button
-      type="button"
-      class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-      @click="prevSlide"
-    >
-      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
-        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 6 10">
-          <path d="M5 1 1 5l4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-        </svg>
-        <span class="sr-only">Previous</span>
-      </span>
-    </button>
-
-    <button
-      type="button"
-      class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-      @click="nextSlide"
-    >
-      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
-        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 6 10">
-          <path d="m1 9 4-4-4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-        </svg>
-        <span class="sr-only">Next</span>
-      </span>
-    </button>
   </div>
 </template>
 
@@ -75,40 +108,35 @@ const props = defineProps({
 })
 
 const activeIndex = ref(0)
-
 let slideInterval = null
 
-// Go to the next slide
 function nextSlide() {
   activeIndex.value = (activeIndex.value + 1) % props.sliders.length
 }
-
-// Go to the previous slide
 function prevSlide() {
   activeIndex.value = (activeIndex.value - 1 + props.sliders.length) % props.sliders.length
 }
-
-// Go to a specific slide
 function goToSlide(index) {
   activeIndex.value = index
 }
-
-// Start the auto-slide functionality
 function startAutoSlide() {
-  slideInterval = setInterval(() => {
-    nextSlide()
-  }, 3000) // Change slide every 3 seconds
+  slideInterval = setInterval(nextSlide, 6000)
 }
-
-// Stop the auto-slide when the component is unmounted
-onBeforeUnmount(() => {
-  if (slideInterval) {
-    clearInterval(slideInterval)
-  }
-})
-
-// Start auto-sliding once the component is mounted
-onMounted(() => {
-  startAutoSlide()
-})
+onMounted(startAutoSlide)
+onBeforeUnmount(() => slideInterval && clearInterval(slideInterval))
 </script>
+
+<style>
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+</style>

@@ -15,9 +15,27 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
-Route::get('/product_details', function () {
-    return Inertia::render('client_pages/ProductDetails');
-})->name('product_details');
+// Route::get('/product_details', function () {
+//     return Inertia::render('client_pages/ProductDetails');
+// })->name('product_details');
+
+Route::get('/product_details/{slug}', [HomeController::class, 'show'])->name('product_details.show');
+Route::get('/product_carts', [HomeController::class, 'cart'])->name('product_carts.cart');
+Route::get('/product_orders', [HomeController::class, 'order'])->name('product_orders.order');
+Route::get('/product_payments', [HomeController::class, 'payment'])->name('product_payments.payment');
+
+Route::get('/checkout/cod', function () {
+    return Inertia::render('client_pages/checkout/CODConfirmation');
+})->name('cod.confirmation');
+
+Route::get('/checkout/card', function () {
+    return Inertia::render('client_pages/checkout/CardPayment');
+})->name('card.checkout');
+
+Route::get('/checkout/bkash', function () {
+    return Inertia::render('client_pages/checkout/BkashPayment');
+})->name('bkash.payment');
+
 
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');

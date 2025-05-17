@@ -17,4 +17,45 @@ class HomeController extends Controller
        return Inertia::render('Home', ['sliders'=> $sliders, 'products' => $products]);
 
     }
+
+    public function show($slug)
+    {
+        $product = Product::with(['images', 'category', 'brand']) 
+                          ->where('slug', $slug)
+                          ->firstOrFail();
+
+        return Inertia::render('client_pages/ProductDetails', [
+            'product' => $product
+        ]);
+    }
+    public function cart()
+    {
+        // $product = Product::with(['images', 'category', 'brand']) 
+        //                   ->where('slug', $slug)
+        //                   ->firstOrFail();
+          
+
+          
+        return Inertia::render('client_pages/Cart');
+    }
+    public function order()
+    {
+        // $product = Product::with(['images', 'category', 'brand']) 
+        //                   ->where('slug', $slug)
+        //                   ->firstOrFail();
+          
+
+          
+        return Inertia::render('client_pages/Order');
+    }
+    public function payment()
+    {
+        // $product = Product::with(['images', 'category', 'brand']) 
+        //                   ->where('slug', $slug)
+        //                   ->firstOrFail();
+          
+
+          
+        return Inertia::render('client_pages/Payment');
+    }
 }

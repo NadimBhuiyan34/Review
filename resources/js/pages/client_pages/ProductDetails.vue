@@ -1,105 +1,123 @@
 <script setup>
-import AppLayout from '@/layouts/ClientLayout.vue'
-import { Head } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import AppLayout from '@/layouts/ClientLayout.vue';
+// import Review from '@/Review.vue';
+ 
+import { Head } from '@inertiajs/vue3';
+import { computed, defineProps, ref } from 'vue';
 
 const props = defineProps({
-  product: {
-    type: Object,
-    required: true
-  }
-})
+    product: {
+        type: Object,
+        required: true,
+    },
+});
 
-const mainImage = ref(props.product.image || props.product.images[0])
-
-function changeMainImage(img) {
-  mainImage.value = img
+// Function to get the featured image
+function getFeaturedImage(product) {
+    return product.images.find((img) => img.is_featured) || product.images[0];
 }
+
+// Reactive reference for the main image
+const mainImage = ref(getFeaturedImage(props.product));
+
+// Change the main image on thumbnail click
+function changeMainImage(img) {
+    mainImage.value = img;
+}
+
+const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.trim()));
 </script>
 
 <template>
-  <Head :title="product.name" />
+    <Head :title="product.name" />
 
-  <AppLayout>
-    <div
-      class="min-h-screen bg-gradient-to-tr from-gray-100 via-gray-200 to-gray-100 py-16 px-6 sm:px-12 lg:px-24 flex justify-center items-center">
-      <div class="max-w-6xl w-full bg-white rounded-3xl shadow-xl p-10 flex flex-col lg:flex-row gap-12 text-gray-900">
-        <!-- Left: Images -->
-        <div class="lg:w-1/2 flex flex-col gap-6">
-          <div
-            class="rounded-2xl overflow-hidden border border-gray-200 transition-shadow duration-400 cursor-pointer hover:shadow-md">
-            <img :src="mainImage" alt="Main Product Image"
-              class="w-full h-[520px] object-cover rounded-2xl transition-transform duration-300 hover:scale-105" />
-          </div>
+    <AppLayout>
+        <div
+            class="flex min-h-screen items-center justify-center bg-gradient-to-tr from-gray-100 via-gray-200 to-gray-100 px-6 py-5 sm:px-12 lg:px-24"
+        >
+            <div class="flex w-full max-w-6xl flex-col gap-12 rounded-3xl bg-white p-10 text-gray-900 shadow-xl lg:flex-row">
+                <!-- Left: Images -->
+                <div class="flex flex-col gap-6 lg:w-1/2">
+                    <div class="cursor-pointer overflow-hidden rounded-2xl border border-gray-200 transition-shadow duration-400 hover:shadow-md">
+                        <img
+                            :src="`/storage/${mainImage.image_path}`"
+                            alt="Main Product Image"
+                            class="h-[520px] w-full rounded-2xl object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                    </div>
 
-          <div class="flex gap-4 justify-center lg:justify-start">
-            <button v-for="(img, idx) in product.images" :key="idx" @click="changeMainImage(img)" :class="[ 
-              'w-20 h-20 rounded-lg bg-gray-100 border border-gray-300 transition-all duration-200 overflow-hidden',
-              mainImage === img ? 'border-gray-800 scale-105' : '' 
-            ]">
-              <img :src="img" alt="Thumbnail" class="w-full h-full object-cover" />
-            </button>
-          </div>
+                    <div class="flex flex-wrap justify-center gap-4 lg:justify-start">
+                        <button
+                            v-for="(img, idx) in product.images"
+                            :key="idx"
+                            @click="changeMainImage(img)"
+                            :class="[
+                                'h-20 w-20 overflow-hidden rounded-lg border border-gray-300 bg-gray-100 transition-all duration-200',
+                                mainImage.image_path === img.image_path ? 'scale-105 border-gray-800' : '',
+                            ]"
+                        >
+                            <img :src="`/storage/${img.image_path}`" alt="Thumbnail" class="h-full w-full object-cover" />
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Product Info -->
+                <div class="flex flex-col justify-between lg:w-1/2">
+                    <div>
+                        <h1 class="mb-4 text-4xl font-bold">
+                            {{ product.name }}
+                        </h1>
+
+                        <p class="mb-3 text-sm font-medium tracking-wider text-gray-500 uppercase">
+                            {{ product.category.name }} • {{ product.brand.name }}
+                        </p>
+
+                        <div class="mb-5 flex items-center gap-4 text-2xl font-semibold">
+                            <span class="text-gray-900">{{ product.price - product.discount_price }} TK</span>
+                            <span class="text-lg font-normal text-gray-400 line-through"> {{ product.price.toFixed(2) }} TK </span>
+                            <span class="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                                Save {{ Math.round((product.discount_price / product.price) * 100) }}%
+                            </span>
+                        </div>
+
+                        <div class="mb-6 flex flex-wrap gap-2">
+                            <span
+                                v-for="(tag, index) in tagList"
+                                :key="index"
+                                class="rounded-full bg-blue-200 px-3 py-1 text-xs font-medium text-gray-700 uppercase"
+                            >
+                                {{ tag.trim() }}
+                            </span>
+                        </div>
+
+                        <p class="mb-8 text-base leading-relaxed text-gray-700 text-justify">
+                            {{ product.description }}
+                        </p>
+
+                        <div class="border-t border-gray-200 pt-6">
+                            <h3 class="mb-4 text-lg font-semibold">Specifications</h3>
+                            <ul class="grid grid-cols-1 gap-x-8 gap-y-3 text-sm text-gray-600 sm:grid-cols-2">
+                                <li><strong class="text-gray-800">Weight:</strong> {{ product.weight }}</li>
+                                <li><strong class="text-gray-800">Length:</strong> {{ product.length }}</li>
+                                <li><strong class="text-gray-800">Width:</strong> {{ product.width }}</li>
+                                <li><strong class="text-gray-800">Height:</strong> {{ product.height }}</li>
+                                <li><strong class="text-gray-800">Specifications:</strong> {{ product.specifications }}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+                        <button
+                            class="w-full rounded-lg bg-gray-900 px-8 py-3 font-semibold text-white transition-colors duration-200 hover:bg-gray-800 sm:w-auto"
+                        >
+                            Add to Cart
+                        </button>
+                        <p class="text-sm text-gray-600 select-none"><span class="font-medium text-gray-800">In stock:</span> 20</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Right: Product Info -->
-        <div class="lg:w-1/2 flex flex-col justify-between">
-          <div>
-            <h1 class="text-4xl font-bold mb-4">
-              {{ product.name }}
-            </h1>
-
-            <p class="text-sm text-gray-500 font-medium uppercase tracking-wider mb-3">
-              Men's Fashion • Awesome Brand
-            </p>
-
-            <div class="flex items-center gap-4 text-2xl font-semibold mb-5">
-              <span class="text-gray-900">${{ product.price.toFixed(2) }}</span>
-              <span class="line-through text-gray-400 text-lg font-normal">${{ product.discount_price.toFixed(2) }}</span>
-              <span class="bg-green-100 text-green-700 text-xs font-medium px-2 py-1 rounded-full">
-                Save {{ Math.round((1 - product.price / product.discount_price) * 100) }}%
-              </span>
-            </div>
-
-            <div class="flex gap-2 mb-6 flex-wrap">
-              <span class="bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1 rounded-full uppercase">
-                New Arrival
-              </span>
-              <span class="bg-red-100 text-red-700 text-xs font-medium px-3 py-1 rounded-full uppercase">
-                Sale
-              </span>
-              <span class="bg-blue-100 text-blue-700 text-xs font-medium px-3 py-1 rounded-full uppercase">
-                Summer Collection
-              </span>
-            </div>
-
-            <p class="text-gray-700 leading-relaxed text-base mb-8">
-              {{ product.description }}
-            </p>
-
-            <div class="border-t border-gray-200 pt-6">
-              <h3 class="text-lg font-semibold mb-4">Specifications</h3>
-              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm text-gray-600">
-                <li><strong class="text-gray-800">Color:</strong> {{ product.specifications.Color }}</li>
-                <li><strong class="text-gray-800">Size:</strong> {{ product.specifications.Size }}</li>
-                <li><strong class="text-gray-800">Material:</strong> {{ product.specifications.Material }}</li>
-                <li><strong class="text-gray-800">Weight:</strong> 1.2 kg</li>
-                <li><strong class="text-gray-800">Dimensions:</strong> 10 x 5 x 3 (L x W x H)</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="mt-10 flex flex-col sm:flex-row items-center gap-4">
-            <button
-              class="bg-gray-900 hover:bg-gray-800 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 w-full sm:w-auto">
-              Add to Cart
-            </button>
-            <p class="text-sm text-gray-600 select-none">
-              <span class="font-medium text-gray-800">In stock:</span> 20
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </AppLayout>
+        <Header/>
+    </AppLayout>
 </template>

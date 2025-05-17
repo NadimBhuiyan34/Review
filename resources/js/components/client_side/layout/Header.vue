@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
-
+ 
 const mobileMenuOpen = ref(false)
 const categoryOpen = ref(false)
 </script>
@@ -34,7 +34,7 @@ const categoryOpen = ref(false)
           ❤️
           <span class="absolute -top-2 -right-2 text-xs bg-red-500 text-white px-1 rounded-full">3</span>
         </Link>
-        <Link href="#" class="relative hover:text-blue-600">
+        <Link  href="/product_carts" class="relative hover:text-blue-600">
           🛒
           <span class="absolute -top-2 -right-2 text-xs bg-red-500 text-white px-1 rounded-full">2</span>
         </Link>
@@ -49,7 +49,7 @@ const categoryOpen = ref(false)
     <!-- Navigation -->
     <nav class="bg-gray-50 border-t hidden md:block">
       <div class="container mx-auto px-4 py-2 flex items-center gap-6 text-sm font-medium text-gray-700">
-        <Link href="#" class="hover:text-blue-600">Home</Link>
+        <Link href="/" class="hover:text-blue-600">Home</Link>
         <Link href="#" class="hover:text-blue-600">Shop</Link>
         <Link href="#" class="hover:text-blue-600">Deals</Link>
         <Link href="#" class="hover:text-blue-600">About</Link>
@@ -93,7 +93,8 @@ const categoryOpen = ref(false)
           <Link :href="route('login')" class="text-gray-600 hover:text-blue-600">Login</Link>
           <div class="flex gap-4">
             <Link href="#" class="relative hover:text-blue-600">❤️<span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">3</span></Link>
-            <Link href="#" class="relative hover:text-blue-600">🛒<span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span></Link>
+            <Link href="/product_carts" class="relative hover:text-blue-600">🛒<span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span></Link>
+            
           </div>
         </div>
       </div>
