@@ -81,4 +81,10 @@ class Product extends Model
     {
         return $this->belongsTo(Shop::class);
     }
+
+    // Product.php
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'product_id');
+    }
 }

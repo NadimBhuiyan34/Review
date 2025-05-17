@@ -22,7 +22,7 @@
           <!-- Image Container -->
           <div class="relative w-full h-48 overflow-hidden">
             <img
-              :src="product.image"
+              :src="`/storage/${product.images.image_path}`"
               :alt="product.name"
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />

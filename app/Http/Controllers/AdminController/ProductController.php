@@ -8,6 +8,7 @@ use App\Http\Requests\AdminRequest\Product\StoreProductRequest;
 use App\Http\Requests\AdminRequest\Product\UpdateProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -39,7 +40,8 @@ class ProductController extends Controller
     {
         $categories = Category::select('id', 'slug', 'name')->where('status', 1)->get();
         $brands = Brand::select('id', 'slug', 'name')->where('status', 1)->get();
-        return Inertia::render('admin_pages/product/Create', ['categories' => $categories, 'brands'=> $brands]);
+        $shops = Shop::select('id', 'slug', 'name')->where('status', 1)->get();
+        return Inertia::render('admin_pages/product/Create', ['categories' => $categories, 'brands' => $brands, 'shops' => $shops]);
     }
 
     /**
@@ -47,7 +49,10 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        Product::create($request->validated());
+
+        return redirect()->route('products.index')
+            ->with('success', 'Product created successfully.');
     }
 
     /**
@@ -55,7 +60,14 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+
+        $product = Product::select('id', 'slug', 'name')
+            ->with('images') 
+            ->findOrFail($product->id); 
+
+        return Inertia::render('admin_pages/product/ImageUpload', [
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -63,7 +75,15 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $categories = Category::select('id', 'slug', 'name')->where('status', 1)->get();
+        $brands = Brand::select('id', 'slug', 'name')->where('status', 1)->get();
+        $shops = Shop::select('id', 'slug', 'name')->where('status', 1)->get();
+        return Inertia::render('admin_pages/product/Edit', [
+            'product' => $product,
+            'categories' => $categories,
+            'brands' => $brands,
+            'shops' => $shops
+        ]);
     }
 
     /**
@@ -71,7 +91,10 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+
+        $product->update($request->validated());
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     /**
@@ -79,6 +102,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }

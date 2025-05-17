@@ -18,36 +18,13 @@ import { defineProps, ref, watch } from 'vue'
 const props = defineProps<{
 
   sliders: any[];
+  products: any[];
 
 }>();
+ 
 
 
-const products = [
-  {
-    id: 1,
-    name: 'Wireless Headphones',
-    description: 'High-quality noise-canceling headphones.',
-    price: '$199',
-    image: 'https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg',
-    badge: 'New',
-  },
-  {
-    id: 2,
-    name: 'Smartwatch',
-    description: 'Track activities, health, and more.',
-    price: '$299',
-    image: '/images/watch.jpg',
-    badge: 'Sale',
-  },
-  {
-    id: 3,
-    name: 'Retro Sneakers',
-    description: 'Comfortable and trendy sneakers.',
-    price: '$89',
-    image: '/images/sneakers.jpg',
-    badge: '',
-  },
-]
+ 
 
 const categories = [
   { name: 'Electronics', image: 'https://cdn-icons-png.flaticon.com/512/1555/1555401.png' },

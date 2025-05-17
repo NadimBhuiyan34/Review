@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AdminController;
 
 use App\Models\ProductImage;
 use App\Http\Requests\StoreProductImageRequest;
 use App\Http\Requests\UpdateProductImageRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductImageController extends Controller
 {
@@ -27,9 +30,29 @@ class ProductImageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductImageRequest $request)
+    public function store(Request $request, Product $product)
     {
-        //
+
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'image' => 'required|image|max:2048',
+            'is_featured' => 'nullable|boolean',
+        ]);
+
+        $product = Product::findOrFail($request->input('product_id'));
+
+        $path = $request->file('image')->store('products', 'public');
+
+        if ($request->boolean('is_featured')) {
+            $product->images()->update(['is_featured' => false]);
+        }
+
+        $product->images()->create([
+            'image_path' => $path,
+            'is_featured' => $request->boolean('is_featured'),
+        ]);
+
+        return back()->with('success', 'Image uploaded successfully.');
     }
 
     /**
@@ -61,6 +84,8 @@ class ProductImageController extends Controller
      */
     public function destroy(ProductImage $productImage)
     {
-        //
+       $productImage->delete();
+
+         return back()->with('success', 'Image uploaded successfully.');
     }
 }

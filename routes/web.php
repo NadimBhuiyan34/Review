@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController\BrandController;
 use App\Http\Controllers\AdminController\CategoryController;
 use App\Http\Controllers\AdminController\ProductController;
+use App\Http\Controllers\AdminController\ProductImageController;
 use App\Http\Controllers\AdminController\SliderController;
 use App\Http\Controllers\ClientController\HomeController;
 use App\Http\Controllers\AdminController\ShopController;
@@ -26,6 +27,9 @@ Route::get('dashboard', function () {
 Route::resource('sliders', SliderController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('brands', BrandController::class);
+Route::resource('products', ProductController::class);
+Route::resource('shops', ShopController::class);
+Route::resource('product_images', ProductImageController::class);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

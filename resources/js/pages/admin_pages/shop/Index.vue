@@ -8,6 +8,7 @@ import { Trash2, PenLine } from 'lucide-vue-next';
 interface Shop {
   id: string;
   name: string;
+  slug: string;
   status: boolean;
 }
 
@@ -91,14 +92,14 @@ const breadcrumbs: BreadcrumbItem[] = [
               </td>
               <td class="px-4 py-3 text-right flex justify-end gap-2">
                 <Link
-                  :href="`/shops/${shop.id}/edit`"
+                  :href="`/shops/${shop.slug}/edit`"
                   class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition"
                 >
                   <PenLine class="w-4 h-4 mr-1" />
                   <span class="hidden sm:inline">Edit</span>
                 </Link>
                 <Link
-                  :href="`/shops/${shop.id}`"
+                  :href="`/shops/${shop.slug}`"
                   method="delete"
                   as="button"
                   class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition"

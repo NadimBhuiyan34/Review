@@ -17,7 +17,7 @@ const form = useForm({
 })
 
 const submit = () => {
-  form.put(`/shops/${props.shop.id}`)
+  form.put(`/shops/${props.shop.slug}`)
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
