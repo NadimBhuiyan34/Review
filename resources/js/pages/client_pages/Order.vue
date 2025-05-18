@@ -1,7 +1,7 @@
 <template>
   <Head title="Checkout" />
   <AppLayout>
-    <div class="min-h-screen bg-amber-50 px-4 py-10 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 lg:px-8 max-w-[1400px] mx-auto my-5">
       <div class="mx-auto max-w-6xl">
         <!-- STEP 1: Order Summary -->
         <div v-if="step === 'summary'" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">

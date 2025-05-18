@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
 
             $table->uuid('id')->primary(); // UUID as primary key
+            $table->uuid('user_id');
             $table->uuid('order_id');
             $table->string('payment_method'); // e.g. stripe, paypal, cod
             $table->string('transaction_id')->nullable();
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             
         });

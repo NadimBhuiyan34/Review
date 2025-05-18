@@ -80,8 +80,17 @@ class OrderController extends Controller
             'phone' => $request->phone,
         ]);
 
+          $user->cartItems()->delete();
 
-          return Inertia::render('client_pages/checkout/BkashPayment');
+          if($request->payment_method === 'bkash' || $request->payment_method === 'cod')
+          {
+             return Inertia::render('client_pages/checkout/BkashPayment');
+          }
+          elseif($request->payment_method === 'card')
+          {
+            return Inertia::render('client_pages/checkout/CardPayment');
+          }
+         
        
 
     }

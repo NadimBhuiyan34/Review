@@ -11,7 +11,7 @@ class OrderItem extends Model
     /** @use HasFactory<\Database\Factories\OrderItemFactory> */
      use HasFactory, HasUuids;
 
- public $incrementing = false;
+    public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = ['order_id', 'product_id', 'quantity', 'price'];

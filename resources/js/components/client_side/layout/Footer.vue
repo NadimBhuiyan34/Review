@@ -1,6 +1,6 @@
 <template>
-  <footer class="bg-gray-100 text-gray-700 pt-10 pb-6 px-4 md:px-10">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+  <footer class="bg-gray-100 text-gray-700 pt-10 pb-6 px-4 md:px-10 max-w-[1400px] mx-auto">
+    <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
       
       <!-- Brand Info -->
       <div>

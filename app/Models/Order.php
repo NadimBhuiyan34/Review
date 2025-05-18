@@ -21,6 +21,10 @@ public function shippingAddress()
 {
     return $this->hasOne(ShippingAddress::class);
 }
+public function payment()
+{
+    return $this->hasOne(Payment::class);
+}
 
 public function orderItems()
 {

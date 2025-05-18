@@ -1,8 +1,8 @@
 <template>
-  <section class="py-16 px-4 bg-white">
+  <section class="py-16 px-4 bg-gray-600 my-5 shadow-lg">
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-12">
-        Shop by <span class="text-blue-600">Category</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-lime-200 mb-12">
+        Shop by <span class="text-white">Category</span>
       </h2>
 
       <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-5">
