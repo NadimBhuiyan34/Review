@@ -1,5 +1,6 @@
 <script setup>
 import AppLayout from '@/layouts/ClientLayout.vue';
+import Review from '@/components/client_side/product/Review.vue';
 // import Review from '@/Review.vue';
  
 import { Head } from '@inertiajs/vue3';
@@ -118,6 +119,6 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
             </div>
         </div>
 
-        <Header/>
+        <Review/>
     </AppLayout>
 </template>

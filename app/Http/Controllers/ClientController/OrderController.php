@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Http\Requests\ClientRequest\Order\StoreOrderRequest;
 use App\Http\Requests\ClientRequest\Order\UpdateOrderRequest;
+use Inertia\Inertia;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -14,7 +17,21 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+         $user = auth()->user();
+         $cartItems = $user->cartItems()->with('product.images')->get();
+
+        $totalPrice = $cartItems->sum(function ($item) {
+            $product = $item->product;
+
+            // Use discount_price if available, otherwise use price
+            $unitPrice = $product->discount_price ?? $product->price;
+
+            return $unitPrice * $item->quantity;
+        });
+        return Inertia::render('client_pages/Order', [
+            'cartItems' => $cartItems,
+            'totalPrice' => $totalPrice,
+        ]);
     }
 
     /**
@@ -30,8 +47,13 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        //
+        $user = $request->user(); // better than auth()->user()
+         
+        dd($request->address);
+       
+
     }
+
 
     /**
      * Display the specified resource.
@@ -62,6 +84,6 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        
     }
 }

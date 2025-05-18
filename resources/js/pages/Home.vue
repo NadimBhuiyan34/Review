@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import AppLayout from '@/layouts/ClientLayout.vue'
 import { Head } from '@inertiajs/vue3'
 
@@ -15,12 +15,22 @@ import { defineProps, ref, watch } from 'vue'
  
  
 
-const props = defineProps<{
+const props = defineProps({
+  sliders: {
+    type: Array,
+    required: true,
+  },
+  products: {
+    type: Array,
+    required: true,
+  },
+  auth: {
+    type: Object,
+    required: true,
+  },
+});
 
-  sliders: any[];
-  products: any[];
 
-}>();
  
 
 
@@ -105,12 +115,13 @@ const testimonials = [
   <Head title="Home" />
 
   <AppLayout>
+   
     <section class="max-w-7xl mx-auto ">
       <!-- Hero / Slider -->
       <Slider :sliders="sliders" />
 
       <!-- Featured Products -->
-      <FeaturedProduct :products="products" />
+      <FeaturedProduct :products="products" :auth="auth" />
 
       <!-- Product Categories -->
       <Category :categories="categories" />

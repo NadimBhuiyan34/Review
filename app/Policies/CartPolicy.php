@@ -37,7 +37,7 @@ class CartPolicy
      */
     public function update(User $user, Cart $cart): bool
     {
-        return false;
+         return $cart->user_id === $user->id;
     }
 
     /**
@@ -45,7 +45,7 @@ class CartPolicy
      */
     public function delete(User $user, Cart $cart): bool
     {
-        return false;
+        return $cart->user_id === $user->id;
     }
 
     /**

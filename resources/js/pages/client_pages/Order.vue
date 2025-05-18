@@ -1,128 +1,222 @@
 <template>
-    <Head title="Checkout" />
-    <AppLayout>
-        <div class="mx-auto max-w-6xl px-6 py-12 bg-gray-100 my-5">
-            <div class="mb-12 text-center">
-                <h1 class="text-4xl font-extrabold text-gray-800">🧾 Checkout</h1>
-                <p class="mt-2 text-gray-500">Complete your purchase by providing the information below.</p>
+  <Head title="Checkout" />
+  <AppLayout>
+    <div class="min-h-screen bg-amber-50 px-4 py-10 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <!-- STEP 1: Order Summary -->
+        <div v-if="step === 'summary'" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <h2 class="mb-5 flex items-center gap-2 text-xl font-semibold text-green-700">🛒 Order Summary</h2>
+
+          <div class="scrollbar-thin scrollbar-thumb-gray-300 max-h-64 space-y-4 overflow-y-auto pr-1">
+            <div
+              v-for="(item, index) in cartItems"
+              :key="index"
+              class="flex items-start justify-between border-b pb-3 last:border-b-0"
+            >
+              <div class="text-sm text-gray-700">
+                <p class="font-medium">{{ item.product.name }}</p>
+                <p class="text-xs text-gray-500">Qty: {{ item.quantity }}</p>
+              </div>
+              <p class="text-sm font-semibold text-gray-900">
+                {{ (item.product.price - item.product.discount_price) * item.quantity }} TK
+              </p>
             </div>
+          </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Shipping Info -->
-                <div class="rounded-2xl bg-white p-8 shadow-lg transition hover:shadow-2xl">
-                    <h2 class="mb-6 text-2xl font-semibold text-blue-700 flex items-center gap-2">
-                        <span>📦</span> Shipping Information
-                    </h2>
-                    <form @submit.prevent="placeOrder" class="space-y-6">
-                        <div v-for="(field, key) in shippingFields" :key="key">
-                            <label :for="key" class="block mb-1 text-sm font-medium text-gray-700">
-                                {{ field.label }}
-                            </label>
-                            <component
-                                :is="field.type === 'textarea' ? 'textarea' : 'input'"
-                                :type="field.type !== 'textarea' ? field.type : undefined"
-                                v-model="shipping[key]"
-                                :id="key"
-                                class="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                :rows="field.type === 'textarea' ? 3 : undefined"
-                                required
-                            />
-                        </div>
-                    </form>
-                </div>
+          <div class="mt-6 flex justify-between border-t pt-4 text-base font-semibold text-gray-800">
+            <span>Total:</span>
+            <span class="text-green-600">{{ cartTotal }} TK</span>
+          </div>
 
-                <!-- Order Summary -->
-                <div class="rounded-2xl bg-white p-8 shadow-lg transition hover:shadow-2xl">
-                    <h2 class="mb-6 text-2xl font-semibold text-green-700 flex items-center gap-2">
-                        <span>🛒</span> Order Summary
-                    </h2>
-
-                    <div class="space-y-4 max-h-64 overflow-y-auto">
-                        <div
-                            v-for="(item, index) in cartItems"
-                            :key="index"
-                            class="flex justify-between items-center border-b pb-3"
-                        >
-                            <div>
-                                <p class="font-semibold text-gray-800">{{ item.name }}</p>
-                                <p class="text-sm text-gray-500">Qty: {{ item.quantity }}</p>
-                            </div>
-                            <p class="font-bold text-gray-700">{{ formatCurrency(item.price * item.quantity) }}</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 flex justify-between border-t pt-4 text-lg font-semibold text-gray-800">
-                        <span>Total</span>
-                        <span class="text-green-600">{{ formatCurrency(cartTotal) }}</span>
-                    </div>
-
-                    <div class="mt-6">
-                        <label class="block mb-1 text-sm font-medium text-gray-700">💳 Payment Method</label>
-                        <select
-                            v-model="paymentMethod"
-                            class="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option disabled value="">Select a payment method</option>
-                            <option value="cod">Cash on Delivery</option>
-                            <option value="card">Credit/Debit Card</option>
-                            <option value="bkash">bKash</option>
-                        </select>
-                    </div>
-
-                    <button
-                        @click="placeOrder"
-                        class="mt-8 w-full rounded-full bg-gradient-to-r from-green-500 to-emerald-600 py-3 text-white font-bold shadow-lg transition hover:opacity-90"
-                    >
-                        ✅ Confirm & Place Order
-                    </button>
-                </div>
-            </div>
+          <div class="mt-6 text-right">
+            <button
+              @click="step = 'shipping'"
+              class="rounded-full bg-blue-600 px-6 py-3 font-bold text-white shadow-lg transition hover:bg-blue-700"
+            >
+              📝 Proceed to Shipping
+            </button>
+          </div>
         </div>
-    </AppLayout>
+
+        <!-- STEP 2: Shipping Form -->
+        <div v-else-if="step === 'shipping'" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <h2 class="mb-5 flex items-center gap-2 text-xl font-semibold text-blue-700">📦 Shipping Information</h2>
+
+          <form @submit.prevent="placeOrder" class="space-y-5" novalidate>
+            <!-- Full Name -->
+            <div>
+              <label for="name" class="mb-1 block text-sm font-medium text-gray-700">Full Name</label>
+              <input
+                id="name"
+                type="text"
+                v-model="form.name"
+                :aria-invalid="form.errors.name ? 'true' : 'false'"
+                :aria-describedby="form.errors.name ? 'name-error' : null"
+                class="w-full rounded-md border border-gray-300 p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+              <p v-if="form.errors.name" id="name-error" class="mt-1 text-sm text-red-600">{{ form.errors.name }}</p>
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+              <label for="phone" class="mb-1 block text-sm font-medium text-gray-700">Phone Number</label>
+              <input
+                id="phone"
+                type="text"
+                v-model="form.phone"
+                :aria-invalid="form.errors.phone ? 'true' : 'false'"
+                :aria-describedby="form.errors.phone ? 'phone-error' : null"
+                class="w-full rounded-md border border-gray-300 p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+              <p v-if="form.errors.phone" id="phone-error" class="mt-1 text-sm text-red-600">{{ form.errors.phone }}</p>
+            </div>
+
+            <!-- City -->
+            <div>
+              <label for="city" class="mb-1 block text-sm font-medium text-gray-700">City</label>
+              <input
+                id="city"
+                type="text"
+                v-model="form.city"
+                :aria-invalid="form.errors.city ? 'true' : 'false'"
+                :aria-describedby="form.errors.city ? 'city-error' : null"
+                class="w-full rounded-md border border-gray-300 p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+              <p v-if="form.errors.city" id="city-error" class="mt-1 text-sm text-red-600">{{ form.errors.city }}</p>
+            </div>
+
+            <!-- Postal Code -->
+            <div>
+              <label for="postal_code" class="mb-1 block text-sm font-medium text-gray-700">Postal Code</label>
+              <input
+                id="postal_code"
+                type="text"
+                v-model="form.postal_code"
+                :aria-invalid="form.errors.postal_code ? 'true' : 'false'"
+                :aria-describedby="form.errors.postal_code ? 'postal_code-error' : null"
+                class="w-full rounded-md border border-gray-300 p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+              <p v-if="form.errors.postal_code" id="postal_code-error" class="mt-1 text-sm text-red-600">{{ form.errors.postal_code }}</p>
+            </div>
+
+            <!-- Shipping Address -->
+            <div>
+              <label for="address" class="mb-1 block text-sm font-medium text-gray-700">Shipping Address</label>
+              <textarea
+                id="address"
+                rows="3"
+                v-model="form.address"
+                :aria-invalid="form.errors.address ? 'true' : 'false'"
+                :aria-describedby="form.errors.address ? 'address-error' : null"
+                class="w-full rounded-md border border-gray-300 p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              ></textarea>
+              <p v-if="form.errors.address" id="address-error" class="mt-1 text-sm text-red-600">{{ form.errors.address }}</p>
+            </div>
+
+            <!-- Payment Method -->
+            <div>
+              <label for="payment_method" class="mb-1 block text-sm font-medium text-gray-700">💳 Payment Method</label>
+              <select
+                id="payment_method"
+                v-model="form.payment_method"
+                :aria-invalid="form.errors.payment_method ? 'true' : 'false'"
+                :aria-describedby="form.errors.payment_method ? 'payment_method-error' : null"
+                class="w-full rounded-md border border-gray-300 p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              >
+                <option disabled value="">Select a payment method</option>
+                <option value="cod">Cash on Delivery</option>
+                <option value="card">Credit/Debit Card</option>
+                <option value="bkash">bKash</option>
+              </select>
+              <p v-if="form.errors.payment_method" id="payment_method-error" class="mt-1 text-sm text-red-600">{{ form.errors.payment_method }}</p>
+            </div>
+
+            <div class="mt-6 flex items-center justify-between">
+              <button
+                @click.prevent="step = 'summary'"
+                type="button"
+                class="rounded-full border border-gray-400 px-6 py-3 font-semibold text-gray-700 hover:bg-gray-100"
+              >
+                ⬅️ Back to Summary
+              </button>
+
+              <button
+                type="submit"
+                class="rounded-full bg-blue-600 px-6 py-3 font-bold text-white shadow-lg transition hover:bg-blue-700"
+                :disabled="form.processing"
+              >
+                ✅ Place Order
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </AppLayout>
 </template>
 
 <script setup>
 import AppLayout from '@/layouts/ClientLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 
-const cartItems = ref([
-    { name: 'Wireless Headphones', price: 2500, quantity: 1 },
-    { name: 'Smart Watch', price: 1800, quantity: 2 },
-]);
-
-const shipping = ref({
-    name: '',
-    email: '',
-    address: '',
-    phone: '',
+const props = defineProps({
+  cartItems: Array,
+  totalPrice: Number,
 });
 
-const shippingFields = {
-    name: { label: 'Full Name', type: 'text' },
-    email: { label: 'Email Address', type: 'email' },
-    address: { label: 'Shipping Address', type: 'textarea' },
-    phone: { label: 'Phone Number', type: 'text' },
-};
+// Step state
+const step = ref('summary'); // 'summary' or 'shipping'
 
-const paymentMethod = ref('');
-const cartTotal = computed(() => cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0));
+// Form setup
+const form = useForm({
+  name: '',
+  city: '',
+  address: '',
+  postal_code: '',
+  phone: '',
+  payment_method: '',
+  cart: props.cartItems,
+  total: props.totalPrice,
+});
 
-const formatCurrency = (amount) => `${amount.toLocaleString()} TK`;
+// Total calculation
+const cartTotal = computed(() =>
+  props.cartItems.reduce(
+    (sum, item) =>
+      sum + (item.product.price - item.product.discount_price) * item.quantity,
+    0
+  )
+);
 
+// Order submission
 const placeOrder = () => {
-    if (!shipping.value.name || !shipping.value.email || !shipping.value.address || !shipping.value.phone || !paymentMethod.value) {
-        alert('⚠️ Please fill in all fields.');
-        return;
-    }
-
-    console.log('✅ Order placed with:', {
-        shipping: shipping.value,
-        payment: paymentMethod.value,
-        items: cartItems.value,
-        total: cartTotal.value,
-    });
-
-    alert('🎉 Order placed successfully!');
+  form.post(route('orders.store'), {
+    onSuccess: () => {
+      alert('Order placed!');
+      form.reset();
+      step.value = 'summary'; // or redirect as needed
+    },
+    onError: () => {
+      
+    },
+  });
 };
 </script>
+
+<style scoped>
+/* Optional scrollbar style */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 3px;
+}
+</style>

@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController\ProductController;
 use App\Http\Controllers\AdminController\ProductImageController;
 use App\Http\Controllers\AdminController\SliderController;
 use App\Http\Controllers\ClientController\HomeController;
+use App\Http\Controllers\ClientController\CartController;
+use App\Http\Controllers\ClientController\OrderController;
 use App\Http\Controllers\AdminController\ShopController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,6 +25,11 @@ Route::get('/product_details/{slug}', [HomeController::class, 'show'])->name('pr
 Route::get('/product_carts', [HomeController::class, 'cart'])->name('product_carts.cart');
 Route::get('/product_orders', [HomeController::class, 'order'])->name('product_orders.order');
 Route::get('/product_payments', [HomeController::class, 'payment'])->name('product_payments.payment');
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('carts', CartController::class);
+    Route::resource('orders', OrderController::class);
+});
 
 Route::get('/checkout/cod', function () {
     return Inertia::render('client_pages/checkout/CODConfirmation');

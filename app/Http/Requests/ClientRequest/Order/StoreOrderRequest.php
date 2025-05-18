@@ -11,7 +11,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->check();
     }
 
     /**
@@ -22,7 +22,19 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+        // Shipping address validation
+        'address' => 'required|string|max:255',
+        'city' => 'required|string|max:100',
+        'postal_code' => 'required|string|max:20',
+        'phone' => 'required|string|max:20',
+
+        // Order & cart
+        'payment_method' => 'required|in:cod,card,bkash',
+        'cart' => 'required|array|min:1',
+        'cart.*.product.id' => 'required|exists:products,id',
+        'cart.*.quantity' => 'required|integer|min:1',
+        'cart.*.product.price' => 'required|numeric|min:0',
+        'total' => 'required|numeric|min:0',
         ];
     }
 }

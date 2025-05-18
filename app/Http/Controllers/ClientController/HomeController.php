@@ -46,7 +46,7 @@ class HomeController extends Controller
           
 
           
-        return Inertia::render('client_pages/Order');
+        return Inertia::render('client_pages/Shipping');
     }
     public function payment()
     {

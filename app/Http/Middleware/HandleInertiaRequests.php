@@ -6,6 +6,8 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -46,6 +48,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+
+            'cartCount' => fn () => Auth::check()
+            ? Cart::where('user_id', Auth::id())->count()
+            : 0,
+
             'ziggy' => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),

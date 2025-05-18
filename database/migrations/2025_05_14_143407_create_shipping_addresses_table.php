@@ -15,14 +15,15 @@ return new class extends Migration
 
             $table->uuid('id')->primary(); // UUID as primary key
             $table->uuid('user_id');
-            $table->string('address');
+            $table->uuid('order_id');
+            $table->string('name');
             $table->string('city');
-            $table->string('state')->nullable();
-            $table->string('postal_code');
-            $table->string('country');
+            $table->string('address');
+            $table->string('postal_code')->nullable();
             $table->string('phone');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->timestamps();
             
         });
