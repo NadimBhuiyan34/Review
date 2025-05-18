@@ -23,6 +23,7 @@ class StoreOrderRequest extends FormRequest
     {
         return [
         // Shipping address validation
+        'name' => 'required|string|max:255',
         'address' => 'required|string|max:255',
         'city' => 'required|string|max:100',
         'postal_code' => 'required|string|max:20',
