@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('product_id');
             $table->unsignedTinyInteger('rating'); // 1 to 5
             $table->text('comment')->nullable();
+            $table->string('sentiment_type')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');

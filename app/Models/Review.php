@@ -16,7 +16,7 @@ class Review extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['product_id', 'user_id', 'rating', 'comment'];
+    protected $fillable = ['product_id', 'user_id', 'rating', 'comment', 'sentiment_type'];
 
      public function user()
     {

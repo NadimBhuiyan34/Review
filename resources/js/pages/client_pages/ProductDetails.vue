@@ -163,6 +163,6 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
             </div>
         </div>
 
-        <Review :reviews = "reviews" :product_id = "product.id" />
+        <Review :reviews = "reviews" :product_id = "product.id" :product_slug = "product.slug" />
     </AppLayout>
 </template>

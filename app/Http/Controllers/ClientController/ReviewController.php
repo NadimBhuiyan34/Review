@@ -32,15 +32,25 @@ class ReviewController extends Controller
     public function store(StoreReviewRequest $request)
     {
          $user = Auth::user();
+         $slug = $request->slug;
+
+
+        $reviewText = $request->input('comment');
+
+        // Call Python script to analyze sentiment
+        $pythonScript = base_path('python_scripts/analyze_sentiment.py');
+        $command = escapeshellcmd("python $pythonScript \"$reviewText\"");
+        $sentiment = trim(shell_exec($command));
 
     // Use relationship method to create the review
         $review = $user->reviews()->create([
             'product_id' => $request->product_id,
             'rating' => $request->rating,
             'comment' => $request->comment,
+            'sentiment_type' => $sentiment,
         ]);
 
-        return redirect()->back();
+         return redirect()->route('product_details.show', ['slug' => $slug]);
 
     }
 
