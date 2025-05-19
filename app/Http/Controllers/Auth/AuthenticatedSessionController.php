@@ -33,8 +33,20 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
-    }
+        
+        $user = auth()->user();
+
+        if ($user->role === 'admin') {
+            return redirect()->intended(route('dashboard', absolute: false));
+        } elseif ($user->role === 'user') {
+            return redirect()->intended(route('home', absolute: false));
+        } else {
+            // Default fallback, if needed
+            return redirect()->intended(route('home', absolute: false));
+        }
+
+           
+        }
 
     /**
      * Destroy an authenticated session.

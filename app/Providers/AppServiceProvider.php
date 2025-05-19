@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Models\Category;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,13 +22,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Inertia::share([
+       Inertia::share([
         'cartCount' => function () {
-            if (Auth::check()) {
-                // Adjust this to your real cart items counting logic
-                return Auth::user()->cartItems()->count();
-            }
-            return 0;
+            return Auth::check() ? Auth::user()->cartItems()->count() : 0;
+        },
+
+        'categories' => function () {
+            return Category::with('child') // or categoryChild if that's your relation name
+                ->whereNull('parent_id')
+                ->where('status', true)
+                ->get();
         },
     ]);
     }

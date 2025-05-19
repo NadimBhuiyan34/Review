@@ -1,5 +1,5 @@
  <template>
-  <div class="bg-sky-50">
+  <div class="bg-sky-50 max-w-[1400px] mx-auto">
     <div class="mx-auto max-w-5xl space-y-10 px-6 py-10">
       
       <!-- Title -->

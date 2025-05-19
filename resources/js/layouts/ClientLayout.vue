@@ -2,6 +2,9 @@
 import Header from '@/components/client_side/layout/Header.vue'
 import Footer from '@/components/client_side/layout/Footer.vue'
  
+import { defineProps, ref, watch } from 'vue'
+
+ 
 
  
 </script>

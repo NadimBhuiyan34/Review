@@ -36,16 +36,16 @@ const props = defineProps({
 
  
 
-const categories = [
-  { name: 'Electronics', image: 'https://cdn-icons-png.flaticon.com/512/1555/1555401.png' },
-  { name: 'Fashion', image: '/img/fashion.jpg' },
-  { name: 'Home & Living', image: '/img/home.jpg' },
-  { name: 'Books', image: '/img/books.jpg' },
-  { name: 'Toys', image: '/img/toys.jpg' },
-  { name: 'Beauty', image: '/img/beauty.jpg' },
-  { name: 'Sports', image: '/img/sports.jpg' },
-  { name: 'Groceries', image: '/img/grocery.jpg' },
-]
+// const categories = [
+//   { name: 'Electronics', image: 'https://cdn-icons-png.flaticon.com/512/1555/1555401.png' },
+//   { name: 'Fashion', image: '/img/fashion.jpg' },
+//   { name: 'Home & Living', image: '/img/home.jpg' },
+//   { name: 'Books', image: '/img/books.jpg' },
+//   { name: 'Toys', image: '/img/toys.jpg' },
+//   { name: 'Beauty', image: '/img/beauty.jpg' },
+//   { name: 'Sports', image: '/img/sports.jpg' },
+//   { name: 'Groceries', image: '/img/grocery.jpg' },
+// ]
 
 const newArrivals = [
   {

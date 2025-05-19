@@ -1,9 +1,7 @@
 <script setup>
-import AppLayout from '@/layouts/ClientLayout.vue';
 import Review from '@/components/client_side/product/Review.vue';
-// import Review from '@/Review.vue';
- 
-import { Head } from '@inertiajs/vue3';
+import AppLayout from '@/layouts/ClientLayout.vue';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import { computed, defineProps, ref } from 'vue';
 
 const props = defineProps({
@@ -13,30 +11,57 @@ const props = defineProps({
     },
 });
 
-// Function to get the featured image
+const page = usePage();
+const user = computed(() => page.props.auth?.user);
+
 function getFeaturedImage(product) {
     return product.images.find((img) => img.is_featured) || product.images[0];
 }
 
-// Reactive reference for the main image
 const mainImage = ref(getFeaturedImage(props.product));
 
-// Change the main image on thumbnail click
 function changeMainImage(img) {
     mainImage.value = img;
 }
 
+function addToCart(product) {
+    if (!user.value) {
+        router.visit(route('login'));
+        return;
+    }
+
+    router.post(
+        route('carts.store'),
+        {
+            product_id: product.id,
+            quantity: 1,
+        },
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                alert(`Added "${product.name}" to cart!`);
+                router.reload({ only: ['cartCount'] });
+            },
+            onError: (errors) => {
+                alert('Something went wrong while adding to cart.');
+                console.error(errors);
+            },
+        },
+    );
+}
+
 const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.trim()));
 </script>
+
 
 <template>
     <Head :title="product.name" />
 
     <AppLayout>
         <div
-            class="flex min-h-screen items-center justify-center bg-gradient-to-tr from-gray-100 via-gray-200 to-gray-100 px-6 py-5 sm:px-12 lg:px-24"
+            class="flex  bg-gradient-to-tr from-gray-100 via-gray-200 to-gray-100 px-6 sm:px-12 lg:px-24 max-w-[1400px] mx-auto"
         >
-            <div class="flex w-full max-w-6xl flex-col gap-12 rounded-3xl bg-white p-10 text-gray-900 shadow-xl lg:flex-row">
+            <div class="flex w-full max-w-6xl flex-col gap-12 my-5 rounded-3xl bg-white p-10 text-gray-900 shadow-xl lg:flex-row">
                 <!-- Left: Images -->
                 <div class="flex flex-col gap-6 lg:w-1/2">
                     <div class="cursor-pointer overflow-hidden rounded-2xl border border-gray-200 transition-shadow duration-400 hover:shadow-md">
@@ -91,7 +116,7 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
                             </span>
                         </div>
 
-                        <p class="mb-8 text-base leading-relaxed text-gray-700 text-justify">
+                        <p class="mb-8 text-justify text-base leading-relaxed text-gray-700">
                             {{ product.description }}
                         </p>
 
@@ -108,17 +133,32 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
                     </div>
 
                     <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-                        <button
+                        <!-- <button
                             class="w-full rounded-lg bg-gray-900 px-8 py-3 font-semibold text-white transition-colors duration-200 hover:bg-gray-800 sm:w-auto"
                         >
                             Add to Cart
+                        </button> -->
+                        <button
+                            @click="addToCart(product)"
+                            class="flex w-full items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6H19m-9 0a1 1 0 100 2 1 1 0 000-2zm6 0a1 1 0 100 2 1 1 0 000-2z"
+                                />
+                            </svg>
+                            Add to Cart
                         </button>
+
                         <p class="text-sm text-gray-600 select-none"><span class="font-medium text-gray-800">In stock:</span> 20</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <Review/>
+        <Review />
     </AppLayout>
 </template>

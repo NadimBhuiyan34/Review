@@ -24,7 +24,10 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  categories: { name: string; image: string }[]
-}>()
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed} from 'vue';
+
+const page = usePage();
+
+const categories = computed(() => page.props.categories ?? []);
 </script>
