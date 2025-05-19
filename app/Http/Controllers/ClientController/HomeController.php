@@ -23,12 +23,12 @@ class HomeController extends Controller
 
     public function show($slug)
     {
-        $product = Product::with(['images', 'category', 'brand']) 
+        $product = Product::with(['images', 'category', 'brand', 'review.user']) 
                           ->where('slug', $slug)
                           ->firstOrFail();
-
+         $reviews = $product->review;
         return Inertia::render('client_pages/ProductDetails', [
-            'product' => $product
+            'product' => $product, 'reviews' => $reviews
         ]);
     }
     public function cart()

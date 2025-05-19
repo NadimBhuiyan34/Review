@@ -9,6 +9,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    reviews: {
+        type: Array,
+        required: true,
+    },
 });
 
 const page = usePage();
@@ -159,6 +163,6 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
             </div>
         </div>
 
-        <Review />
+        <Review :reviews = "reviews" :product_id = "product.id" />
     </AppLayout>
 </template>

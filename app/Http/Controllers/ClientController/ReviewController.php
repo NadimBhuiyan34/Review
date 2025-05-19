@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Review;
 use App\Http\Requests\ClientRequest\Review\StoreReviewRequest;
 use App\Http\Requests\ClientRequest\Review\UpdateReviewRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
@@ -30,7 +31,17 @@ class ReviewController extends Controller
      */
     public function store(StoreReviewRequest $request)
     {
-        //
+         $user = Auth::user();
+
+    // Use relationship method to create the review
+        $review = $user->reviews()->create([
+            'product_id' => $request->product_id,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return redirect()->back();
+
     }
 
     /**

@@ -1,7 +1,7 @@
- <template>
+<template>
   <div class="bg-sky-50 max-w-[1400px] mx-auto">
     <div class="mx-auto max-w-5xl space-y-10 px-6 py-10">
-      
+
       <!-- Title -->
       <h1 class="text-3xl font-bold tracking-tight text-gray-800">Customer Reviews</h1>
 
@@ -15,19 +15,11 @@
         </button>
       </div>
 
-      <!-- Review Form (Conditional) -->
+      <!-- Review Form -->
       <div v-if="showForm" class="rounded-2xl bg-white p-6 shadow-md space-y-6">
         <h2 class="text-xl font-semibold text-gray-700">Write a Review</h2>
         <form @submit.prevent="submitReview" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Name</label>
-            <input
-              v-model="form.name"
-              type="text"
-              class="mt-1 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              required
-            />
-          </div>
+          
 
           <div>
             <label class="block text-sm font-medium text-gray-700">Your Review</label>
@@ -51,9 +43,7 @@
                   class="h-6 w-6 cursor-pointer transition hover:scale-110"
                   :class="form.rating >= i ? 'text-yellow-400' : 'text-gray-300'"
                 >
-                  <path
-                    d="M12 .587l3.668 7.57 8.332 1.151-6.064 5.818 1.432 8.274L12 18.896l-7.368 4.504 1.432-8.274-6.064-5.818 8.332-1.151z"
-                  />
+                  <path d="M12 .587l3.668 7.57 8.332 1.151-6.064 5.818 1.432 8.274L12 18.896l-7.368 4.504 1.432-8.274-6.064-5.818 8.332-1.151z"/>
                 </svg>
               </template>
             </div>
@@ -105,12 +95,10 @@
           v-for="option in filters"
           :key="option"
           @click="selectedFilter = option"
-          :class="[
-            'flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition',
+          :class="[ 'flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition',
             selectedFilter === option
               ? 'bg-blue-600 text-white shadow'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-          ]"
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
         >
           <span
             :class="{
@@ -166,72 +154,40 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { usePage, router } from '@inertiajs/vue3'
+
+const props = defineProps({
+  reviews: Array,
+  product_id: String
+})
 
 const showForm = ref(false)
-
-const reviews = ref([
-  {
-    name: 'John Doe',
-    sentiment: 'Good',
-    comment: 'This product is amazing! The quality exceeded my expectations.',
-    rating: 5
-  },
-  {
-    name: 'Jane Smith',
-    sentiment: 'Neutral',
-    comment: 'It’s decent, but could be improved. Delivery took a bit longer than expected.',
-    rating: 3
-  },
-  {
-    name: 'Mike Johnson',
-    sentiment: 'Bad',
-    comment: 'Not satisfied. The product broke after a few days of use.',
-    rating: 1
-  },
-  {
-    name: 'Lisa Ray',
-    sentiment: 'Good',
-    comment: 'Highly recommend! Will buy again.',
-    rating: 4
-  },
-])
-
 const filters = ['All', 'Good', 'Neutral', 'Bad']
 const selectedFilter = ref('All')
 
+// Reactive reviews list
+const reviews = ref([...props.reviews])
+
 const form = ref({
-  name: '',
+ 
+  product_id: props.product_id,
   comment: '',
   rating: 0
 })
 
-const getSentiment = (rating) => {
-  if (rating >= 4) return 'Good'
-  if (rating === 3) return 'Neutral'
-  return 'Bad'
-}
-
 const submitReview = () => {
-  if (!form.value.name || !form.value.comment || form.value.rating === 0) return
+  if (!form.value.comment || form.value.rating === 0) return
 
-  const newReview = {
-    name: form.value.name,
-    comment: form.value.comment,
-    rating: form.value.rating,
-    sentiment: getSentiment(form.value.rating)
-  }
+  router.post(route('reviews.store'), form.value, {
+    preserveScroll: true,
+    onSuccess: () => {
+      const flashed = usePage().props.flash.review
+      if (flashed) reviews.value.unshift(flashed)
 
-  reviews.value.unshift(newReview)
-
-  // Reset form
-  form.value = {
-    name: '',
-    comment: '',
-    rating: 0
-  }
-
-  // Hide form after submission
-  showForm.value = false
+      form.value = { name: '', comment: '', rating: 0 }
+      showForm.value = false
+    }
+  })
 }
 
 const filteredReviews = computed(() => {
