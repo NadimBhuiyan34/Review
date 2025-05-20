@@ -10,6 +10,7 @@ use App\Http\Controllers\ClientController\CartController;
 use App\Http\Controllers\ClientController\OrderController;
 use App\Http\Controllers\AdminController\ShopController;
 use App\Http\Controllers\ClientController\ReviewController;
+use App\Http\Controllers\ClientController\WhishListController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -29,6 +30,7 @@ Route::get('/product_payments', [HomeController::class, 'payment'])->name('produ
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('carts', CartController::class);
+    Route::resource('whishlists', WhishListController::class);
     Route::resource('orders', OrderController::class);
     Route::resource('reviews', ReviewController::class);
 });

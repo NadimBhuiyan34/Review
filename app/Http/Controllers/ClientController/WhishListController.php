@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\WhishList;
 use App\Http\Requests\ClientRequest\WishList\StoreWhishListRequest;
 use App\Http\Requests\ClientRequest\WishList\UpdateWhishListRequest;
-
+use Inertia\Inertia;
 class WhishListController extends Controller
 {
     /**
@@ -14,7 +14,21 @@ class WhishListController extends Controller
      */
     public function index()
     {
-        //
+
+            $user = auth()->user();
+
+        $wishlist = $user->wishlist()->with([
+            'product' => function ($query) {
+                $query->with(['images' => function ($q) {
+                    $q->where('is_featured', true);
+                }]);
+            }
+        ])->get();
+
+            return Inertia::render('client_pages/WhishList', [
+                'wishlist' => $wishlist,
+            ]);
+
     }
 
     /**
@@ -30,7 +44,16 @@ class WhishListController extends Controller
      */
     public function store(StoreWhishListRequest $request)
     {
-        //
+$validated = $request->validated(); // Better than calling validate() again
+
+    $user = $request->user();
+
+    $user->wishlist()->updateOrCreate(
+        ['product_id' => $validated['product_id']],
+        [] // You can add other fields here if needed
+    );
+
+    return back()->with('success', 'Product added to wishlist.');
     }
 
     /**
@@ -60,8 +83,11 @@ class WhishListController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WhishList $whishList)
+    public function destroy(WhishList $whishlist)
     {
-        //
+           
+            $whishlist->delete();
+
+           return back()->with('success', 'Item removed from wishlist');
     }
 }

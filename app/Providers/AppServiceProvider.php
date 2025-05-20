@@ -26,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
         'cartCount' => function () {
             return Auth::check() ? Auth::user()->cartItems()->count() : 0;
         },
+        'whishCount' => function () {
+            return Auth::check() ? Auth::user()->whishlist()->count() : 0;
+        },
 
         'categories' => function () {
             return Category::with('child') // or categoryChild if that's your relation name

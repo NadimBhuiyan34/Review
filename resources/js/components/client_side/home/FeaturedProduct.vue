@@ -29,13 +29,12 @@
               loading="lazy"
             />
 
-            <!-- Wishlist Button -->
-            <button
-              @click.stop="toggleWishlist(product)"
-              class="absolute top-4 left-4 z-20 rounded-full bg-white p-2 text-gray-400 shadow-md transition duration-300 hover:text-red-600 hover:shadow-lg"
-              :aria-label="'Add ' + product.name + ' to wishlist'"
+            
+              <button
+              @click.stop="addToWhishList(product)"
+              class="absolute top-4 right-4 z-20 rounded-full bg-white p-2 text-indigo-600 shadow-md transition duration-300 hover:bg-indigo-100 hover:shadow-lg"
+              :aria-label="'Add ' + product.name + ' to cart'"
             >
-              <!-- Filled Heart -->
               <svg
                 v-if="isInWishlist(product)"
                 xmlns="http://www.w3.org/2000/svg"
@@ -159,6 +158,30 @@ function addToCart(product) {
       onSuccess: () => {
         alert(`Added "${product.name}" to cart!`)
         router.reload({ only: ['cartCount'] });
+      },
+      onError: (errors) => {
+        alert('Something went wrong while adding to cart.')
+        console.error(errors)
+      },
+    }
+  )
+}
+function addToWhishList(product) {
+  if (!props.auth?.user) {
+    router.visit(route('login'))
+    return
+  }
+
+  router.post(
+    route('whishlists.store'),
+    {
+      product_id: product.id,
+    },
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        alert(`Added "${product.name}" to whishlist!`)
+        // router.reload({ only: ['whishCount'] });
       },
       onError: (errors) => {
         alert('Something went wrong while adding to cart.')

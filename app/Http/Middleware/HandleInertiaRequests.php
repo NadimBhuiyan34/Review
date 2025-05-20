@@ -8,6 +8,7 @@ use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
+use App\Models\WhishList;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -51,6 +52,9 @@ class HandleInertiaRequests extends Middleware
 
             'cartCount' => fn () => Auth::check()
             ? Cart::where('user_id', Auth::id())->count()
+            : 0,
+            'whishCount' => fn () => Auth::check()
+            ? WhishList::where('user_id', Auth::id())->count()
             : 0,
 
             'ziggy' => [

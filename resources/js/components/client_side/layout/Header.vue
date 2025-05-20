@@ -18,6 +18,7 @@ import {
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
 const cartCount = computed(() => page.props.cartCount ?? 0);
+const whishCount = computed(() => page.props.whishCount ?? 0);
 const categories = computed(() => page.props.categories ?? []);
 
 const mobileMenuOpen = ref(false);
@@ -127,11 +128,11 @@ function closeAll() {
                 </div>
 
                 <!-- Wishlist -->
-                <Link href="#" class="relative hover:text-blue-600">
+                <Link :href="route('whishlists.index')" class="relative hover:text-blue-600">
                     <HeartIcon class="h-6 w-6" />
                     <span
                         class="absolute -top-2 -right-3 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1 text-xs text-white"
-                        >3</span
+                        >{{ whishCount }}</span
                     >
                 </Link>
 

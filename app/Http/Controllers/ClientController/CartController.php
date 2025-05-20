@@ -82,6 +82,7 @@ class CartController extends Controller
     public function destroy(Cart $cart)
     {
         // Ensure the user owns the cart
+ 
         $this->authorize('delete', $cart); // Optional: Add policy
 
         $cart->delete();
