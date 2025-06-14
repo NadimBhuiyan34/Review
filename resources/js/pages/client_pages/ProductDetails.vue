@@ -63,9 +63,9 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
 
     <AppLayout>
         <div
-            class="flex  bg-gradient-to-tr from-gray-100 via-gray-200 to-gray-100 px-6 sm:px-12 lg:px-24 max-w-[1400px] mx-auto"
+            class="flex max-w-[1400px] mx-auto"
         >
-            <div class="flex w-full max-w-6xl flex-col gap-12 my-5 rounded-3xl bg-white p-10 text-gray-900 shadow-xl lg:flex-row">
+            <div class="flex w-full flex-col gap-12 my-5  bg-white p-10 text-gray-900 shadow-lg lg:flex-row">
                 <!-- Left: Images -->
                 <div class="flex flex-col gap-6 lg:w-1/2">
                     <div class="cursor-pointer overflow-hidden rounded-2xl border border-gray-200 transition-shadow duration-400 hover:shadow-md">

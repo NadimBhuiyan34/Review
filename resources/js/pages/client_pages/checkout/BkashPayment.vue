@@ -2,7 +2,7 @@
   <AppLayout>
     <Head title="bKash Payment" />
 
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-300 via-pink-400 to-pink-500 px-4">
+    <div class="min-h-screen max-w-[1400px] mx-auto flex items-center justify-center bg-gradient-to-r from-pink-300 via-pink-400 to-pink-500 px-4">
       <div
         class="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 space-y-6"
       >

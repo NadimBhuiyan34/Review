@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-sky-50 max-w-[1400px] mx-auto">
-    <div class="mx-auto max-w-5xl space-y-10 px-6 py-10">
+  <div class="max-w-[1400px] mx-auto  mb-5">
+    <div class="mx-auto shadow-lg space-y-10 px-6 py-10">
 
       <!-- Title -->
       <h1 class="text-3xl font-bold tracking-tight text-gray-800">Customer Reviews</h1>

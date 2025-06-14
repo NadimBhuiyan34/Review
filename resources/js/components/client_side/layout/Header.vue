@@ -67,7 +67,7 @@ function closeAll() {
 </script>
 
 <template>
-    <header class="sticky top-0 z-40 mx-auto w-full max-w-[1400px] bg-amber-50 backdrop-blur">
+    <header class="sticky top-0 z-40 mx-auto w-full max-w-[1400px] bg-white backdrop-blur">
         <!-- Top bar -->
         <div class="container mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 lg:py-4">
             <!-- Logo -->

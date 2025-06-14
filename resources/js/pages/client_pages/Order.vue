@@ -1,12 +1,14 @@
 <template>
   <Head title="Checkout" />
   <AppLayout>
-    <div class="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 lg:px-8 max-w-[1400px] mx-auto my-5">
-      <div class="mx-auto max-w-6xl">
+    <div class="px-4 py-10 sm:px-6 lg:px-8 max-w-[1400px] mx-auto my-5">
+      <div class="mx-auto ">
         <!-- STEP 1: Order Summary -->
         <div v-if="step === 'summary'" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 class="mb-5 flex items-center gap-2 text-xl font-semibold text-green-700">🛒 Order Summary</h2>
-
+          <!-- <h2 class="mb-5 text-center items-center gap-2 text-xl font-semibold text-green-700"></h2> -->
+            <h1 class="text-4xl font-extrabold text-gray-800 mb-10 text-center">
+          🛒 Order Summary
+        </h1>
           <div class="scrollbar-thin scrollbar-thumb-gray-300 max-h-64 space-y-4 overflow-y-auto pr-1">
             <div
               v-for="(item, index) in cartItems"
@@ -25,13 +27,14 @@
 
           <div class="mt-6 flex justify-between border-t pt-4 text-base font-semibold text-gray-800">
             <span>Total:</span>
-            <span class="text-green-600">{{ cartTotal }} TK</span>
+            <span class="text-red-600">{{ cartTotal }} TK</span>
           </div>
+          <hr class="my-4">
 
           <div class="mt-6 text-right">
             <button
               @click="step = 'shipping'"
-              class="rounded-full bg-blue-600 px-6 py-3 font-bold text-white shadow-lg transition hover:bg-blue-700"
+              class="mt-5 sm:mt-0 px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-full shadow-lg transition duration-300"
             >
               📝 Proceed to Shipping
             </button>
@@ -40,8 +43,11 @@
 
         <!-- STEP 2: Shipping Form -->
         <div v-else-if="step === 'shipping'" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 class="mb-5 flex items-center gap-2 text-xl font-semibold text-blue-700">📦 Shipping Information</h2>
-
+          <!-- <h2 class="mb-5 text-center items-center gap-2 text-xl font-semibold text-blue-700">📦 Shipping Information</h2> -->
+              <h1 class="text-4xl font-extrabold text-gray-800 mb-10 text-center">
+          📦 Shipping Information
+        </h1>
+          
           <form @submit.prevent="placeOrder" class="space-y-5" novalidate>
             <!-- Full Name -->
             <div>
@@ -141,14 +147,14 @@
               <button
                 @click.prevent="step = 'summary'"
                 type="button"
-                class="rounded-full border border-gray-400 px-6 py-3 font-semibold text-gray-700 hover:bg-gray-100"
+                class="rounded-full border border-gray-400 px-6 py-3 font-semibold text-gray-700  hover:bg-gray-100"
               >
                 ⬅️ Back to Summary
               </button>
 
               <button
                 type="submit"
-                class="rounded-full bg-blue-600 px-6 py-3 font-bold text-white shadow-lg transition hover:bg-blue-700"
+                class="mt-5 sm:mt-0 px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-full shadow-lg transition duration-300"
                 :disabled="form.processing"
               >
                 ✅ Place Order

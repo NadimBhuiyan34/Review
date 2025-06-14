@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full max-w-[1400px] mx-auto overflow-hidden rounded-lg shadow-2xl select-none pt-5 mb-5 ">
+  <div class="relative w-full max-w-[1400px] mx-auto overflow-hidden   select-none mb-5 ">
     <!-- Slide container -->
     <div class="relative h-[400px] md:h-[500px]">
       <transition-group

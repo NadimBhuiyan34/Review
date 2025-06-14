@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('reviews', ReviewController::class);
 });
 
+
 Route::get('/checkout/cod', function () {
     return Inertia::render('client_pages/checkout/CODConfirmation');
 })->name('cod.confirmation');
@@ -52,6 +53,7 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/allproducts', [HomeController::class, 'allproduct'])->name('products.all');
 
 Route::resource('sliders', SliderController::class);
 Route::resource('categories', CategoryController::class);
