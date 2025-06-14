@@ -1,7 +1,7 @@
 <template>
     <Head title="All Products" />
     <AppLayout>
-        <div class="mx-auto max-w-[1400px] px-4 py-10">
+        <div class="mx-auto max-w-[1550px] px-4 py-10">
             <!-- Title -->
             <h1 class="mb-10 text-center text-4xl font-extrabold text-gray-900 drop-shadow-md">🛒 Browse Our Products</h1>
 

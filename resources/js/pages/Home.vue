@@ -116,7 +116,7 @@ const testimonials = [
 
   <AppLayout>
    
-    <section class="max-w-[1400px] mx-auto bg-gray-50  pb-5">
+    <section class="max-w-[1550px] mx-auto bg-white  pb-5">
       <!-- Hero / Slider -->
       <Slider :sliders="sliders" />
 

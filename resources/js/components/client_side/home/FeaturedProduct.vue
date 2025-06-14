@@ -1,6 +1,6 @@
 <template>
-    <section class="px-4 py-20 shadow-lg">
-        <div class="mx-auto max-w-7xl">
+    <section class="px-4 py-20 bg-gray-50">
+        <div class="mx-auto ">
             <!-- Section Heading -->
             <div class="mb-12 text-center">
                 <h2 class="text-4xl font-extrabold text-gray-900">Explore <span class="text-indigo-600">Our Products</span></h2>
@@ -89,6 +89,7 @@
                 :href="route('products.all')"
                 class="mx-auto mt-10 inline-flex items-center justify-center gap-2 rounded-full border border-blue-600 bg-white/20 px-6 py-3 text-sm font-semibold text-blue-700 shadow-md backdrop-blur-sm transition-all duration-300 hover:bg-blue-600 hover:text-white hover:shadow-xl focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none"
             >
+             <span class="tracking-wide uppercase">See More</span>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
@@ -98,7 +99,7 @@
                 >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-                <span class="tracking-wide uppercase">See More</span>
+               
             </Link>
         </div>
     </section>

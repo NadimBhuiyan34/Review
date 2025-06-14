@@ -67,9 +67,9 @@ function closeAll() {
 </script>
 
 <template>
-    <header class="sticky top-0 z-40 mx-auto w-full max-w-[1400px] bg-white backdrop-blur">
+    <header class="sticky top-0 z-40 mx-auto w-full  bg-white backdrop-blur">
         <!-- Top bar -->
-        <div class="container mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 lg:py-4">
+        <div class="container mx-auto flex  items-center justify-between px-4 py-3 lg:py-4">
             <!-- Logo -->
             <Link href="/" class="text-3xl font-extrabold tracking-tight" @click="closeMobile">
                 <span class="bg-gradient-to-r from-blue-700 to-purple-500 bg-clip-text text-transparent">Review</span>
@@ -154,8 +154,8 @@ function closeAll() {
         </div>
 
         <!-- Desktop navigation -->
-        <nav class="mx-auto hidden max-w-[1400px] border-t bg-blue-700 text-white lg:block">
-            <div class="container mx-auto flex max-w-[1400px] items-center gap-6 px-4 py-2 text-sm font-medium text-white">
+        <nav class="mx-auto hidden   border-t bg-blue-700 text-white lg:block">
+            <div class="container mx-auto flex max-w-[1550px] items-center gap-6 px-4 py-2 text-sm font-medium text-white">
                 <Link href="/" class="rounded-lg p-2 hover:bg-blue-500">Home</Link>
                 <Link href="#" class="rounded-lg p-2 hover:bg-blue-500">Shop</Link>
                 <Link href="#" class="rounded-lg p-2 hover:bg-blue-500">Deals</Link>

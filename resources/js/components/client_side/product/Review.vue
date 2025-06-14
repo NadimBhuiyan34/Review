@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[1400px] mx-auto  mb-5">
+  <div class="max-w-[1550px] mx-auto  mb-5">
     <div class="mx-auto shadow-lg space-y-10 px-6 py-10">
 
       <!-- Title -->

@@ -1,7 +1,7 @@
 <!-- NewArrivals.vue -->
 <template>
-  <section class="py-20 bg-white px-6 my-5 shadow-lg ">
-    <div class="max-w-7xl mx-auto">
+  <section class="py-20 bg-white px-6 my-5  ">
+    <div class=" mx-auto">
       <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">🆕 New Arrivals</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         <div

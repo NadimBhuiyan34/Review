@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full max-w-[1400px] mx-auto overflow-hidden   select-none mb-5 ">
+  <div class="relative w-full max-w-[1550px] mx-auto overflow-hidden   select-none mb-5 ">
     <!-- Slide container -->
     <div class="relative h-[400px] md:h-[500px]">
       <transition-group
@@ -33,11 +33,11 @@
               {{ slide.description }}
             </p>
             
-            <button
+            <Link  :href="route('products.all')" 
               class="inline-block bg-yellow-500 hover:bg-indigo-700 transition text-white font-semibold py-3 px-10 rounded-full shadow-lg transform hover:-translate-y-1"
             >
               Shop Now
-            </button>
+            </Link>
           </div>
         </div>
       </transition-group>
@@ -99,7 +99,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-
+import { Link, usePage, router } from '@inertiajs/vue3';
 const props = defineProps({
   sliders: {
     type: Array,

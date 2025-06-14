@@ -1,7 +1,7 @@
 <!-- Testimonials.vue -->
 <template>
-  <section class="py-20 bg-white px-6 my-5 shadow-lg">
-    <div class="max-w-6xl mx-auto text-center">
+  <section class="py-20 bg-white px-6 my-5">
+    <div class="mx-auto text-center">
       <h2 class="text-3xl font-bold text-gray-800 mb-12">🌟 What Our Customers Say</h2>
       <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
         <div

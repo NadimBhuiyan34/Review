@@ -1,7 +1,7 @@
 <!-- FlashDeals.vue -->
 <template>
-  <section class="py-20 bg-gradient-to-r from-yellow-100 to-red-100 px-6 my-5 shadow-lg">
-    <div class="max-w-6xl mx-auto text-center">
+  <section class="py-20 bg-gradient-to-r from-yellow-100 to-red-100 px-6 my-5 ">
+    <div class=" mx-auto text-center">
       <h2 class="text-3xl font-extrabold text-red-600 mb-6">⚡ Flash Deals</h2>
       <p class="text-gray-700 mb-10 text-lg">Hurry! These deals won’t last long.</p>
 

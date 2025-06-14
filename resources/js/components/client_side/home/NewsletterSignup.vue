@@ -1,7 +1,7 @@
 <!-- NewsletterSignup.vue -->
 <template>
-  <section class="py-20 bg-blue-50 px-6 my-5 shadow-lg">
-    <div class="max-w-xl mx-auto text-center">
+  <section class="py-20 bg-blue-50 px-6 my-5 ">
+    <div class=" mx-auto text-center">
       <h2 class="text-3xl font-bold text-blue-700 mb-4">📬 Join Our Newsletter</h2>
       <p class="text-gray-600 mb-6">Stay updated with our latest offers and products.</p>
 
