@@ -11,6 +11,7 @@ use App\Http\Controllers\ClientController\OrderController;
 use App\Http\Controllers\AdminController\ShopController;
 use App\Http\Controllers\ClientController\ReviewController;
 use App\Http\Controllers\ClientController\WhishListController;
+use App\Http\Controllers\ClientController\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('whishlists', WhishListController::class);
     Route::resource('orders', OrderController::class);
     Route::resource('reviews', ReviewController::class);
+    Route::resource('profiles', ProfileController::class);
+    // Route::get('/profile', [ProfileController::class, 'userprofile'])->name('user.profile');
 });
 
 
@@ -54,6 +57,7 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/allproducts', [HomeController::class, 'allproduct'])->name('products.all');
+
 
 Route::resource('sliders', SliderController::class);
 Route::resource('categories', CategoryController::class);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,6 +42,11 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'role' => 'user',   
             'password' => Hash::make($request->password),
+        ]);
+
+        Profile::create([
+        'user_id' => $user->id,
+        // You can set default values or pull from $request if needed
         ]);
 
         event(new Registered($user));

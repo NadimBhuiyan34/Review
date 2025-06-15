@@ -110,7 +110,7 @@ function closeAll() {
                     <!-- Profile dropdown -->
                     <transition name="fade">
                         <div v-if="profileMenuOpen && user" class="absolute right-0 mt-2 w-48 overflow-hidden rounded-lg border bg-white shadow-lg">
-                            <Link href="/profile" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50" @click="profileMenuOpen = false">
+                            <Link :href="route('profiles.index')" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50" @click="profileMenuOpen = false">
                                 <UserCircleIcon class="h-5 w-5" />
                                 Profile
                             </Link>
