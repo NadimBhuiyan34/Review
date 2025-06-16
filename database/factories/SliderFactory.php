@@ -17,7 +17,12 @@ class SliderFactory extends Factory
     public function definition(): array
     {
         return [
-            //
-        ];
+        'id' => Str::uuid(),
+        'name' => fake()->sentence(3),
+        'slug' => Str::slug(fake()->unique()->sentence(3)),
+        'description' => fake()->paragraph(),
+        'image' => 'https://via.placeholder.com/800x400', // Default fallback
+        'status' => true,
+    ];
     }
 }

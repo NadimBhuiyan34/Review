@@ -180,6 +180,14 @@ const props = defineProps({
 // Step state
 const step = ref('summary'); // 'summary' or 'shipping'
 
+const cartTotal = computed(() =>
+  props.cartItems.reduce(
+    (sum, item) =>
+      sum + (item.product.price - item.product.discount_price) * item.quantity,
+    0
+  )
+);
+
 // Form setup
 const form = useForm({
   name: '',
@@ -189,17 +197,10 @@ const form = useForm({
   phone: '',
   payment_method: '',
   cart: props.cartItems,
-  total: props.totalPrice,
+  total: cartTotal,
 });
 
 // Total calculation
-const cartTotal = computed(() =>
-  props.cartItems.reduce(
-    (sum, item) =>
-      sum + (item.product.price - item.product.discount_price) * item.quantity,
-    0
-  )
-);
 
 // Order submission
 const placeOrder = () => {

@@ -15,9 +15,11 @@ return new class extends Migration
 
             $table->uuid('id')->primary(); // UUID as primary key
             $table->uuid('user_id');
+            $table->string('order_number')->unique(); // For human-readable tracking ID
             $table->string('status')->default('pending'); // pending, paid, shipped, completed, cancelled
             $table->decimal('total_price', 10, 2);
             $table->string('payment_method')->nullable();
+            $table->string('payment_status')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

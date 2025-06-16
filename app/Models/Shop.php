@@ -16,7 +16,7 @@ class Shop extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['name','status', 'slug'];
+    protected $fillable = ['name','status', 'slug', 'logo'];
 
     protected $casts = [
         'status' => 'boolean'

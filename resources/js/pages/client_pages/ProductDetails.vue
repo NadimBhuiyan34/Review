@@ -54,37 +54,51 @@ function addToCart(product) {
     );
 }
 
-const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.trim()));
+const tagsArray = computed(() => {
+  if (!props.product.tags) return [];
+  try {
+    return JSON.parse(props.product.tags);
+  } catch {
+    return [];
+  }
+});
+
 </script>
 
-
 <template>
-
     <Head :title="product.name" />
 
     <AppLayout>
-        <div class="flex max-w-[1550px] mx-auto">
-            <div class="flex w-full flex-col gap-12 my-5  bg-white p-10 text-gray-900 shadow-lg lg:flex-row">
+        <div class="mx-auto flex max-w-[1550px]">
+            <div class="my-5 flex w-full flex-col gap-12 bg-white p-10 text-gray-900 shadow-lg lg:flex-row">
                 <!-- Left: Images -->
                 <div class="flex flex-col gap-6 lg:w-1/2">
-                    <div
-                        class="cursor-pointer overflow-hidden rounded-2xl border border-gray-200 transition-shadow duration-400 hover:shadow-md">
-                        <img :src="mainImage?.image_path ? `/storage/${mainImage.image_path}` : '/images/fallback.jpg'"
+                    <div class="cursor-pointer overflow-hidden rounded-2xl border border-gray-200 transition-shadow duration-400 hover:shadow-md">
+                        <img
+                            :src="mainImage?.image_path ? `/storage/${mainImage.image_path}` : '/images/fallback.jpg'"
                             alt="Main Product Image"
-                            class="h-[520px] w-full rounded-2xl object-cover transition-transform duration-300 hover:scale-105" />
+                            class="h-[520px] w-full rounded-2xl object-cover transition-transform duration-300 hover:scale-105"
+                        />
                     </div>
-
 
                     <div class="flex flex-wrap justify-center gap-4 lg:justify-start">
-                        <button v-for="(img, idx) in product.images" :key="idx" @click="changeMainImage(img)" :class="[
-                            'h-20 w-20 overflow-hidden rounded-lg border border-gray-300 bg-gray-100 transition-all duration-200',
-                            mainImage.image_path === img.image_path ? 'scale-105 border-gray-800' : '',
-                        ]">
-                            <img :src="`/storage/${img.image_path}`" alt="Thumbnail" class="h-full w-full object-cover"
-                                @error="event => event.target.src = '/images/fallback-thumb.jpg'" />
+                        <button
+                            v-for="(img, idx) in product.images"
+                            :key="idx"
+                            @click="changeMainImage(img)"
+                            :class="[
+                                'h-20 w-20 overflow-hidden rounded-lg border border-gray-300 bg-gray-100 transition-all duration-200',
+                                mainImage.image_path === img.image_path ? 'scale-105 border-gray-800' : '',
+                            ]"
+                        >
+                            <img
+                                :src="`/storage/${img.image_path}`"
+                                alt="Thumbnail"
+                                class="h-full w-full object-cover"
+                                @error="(event) => (event.target.src = '/images/fallback-thumb.jpg')"
+                            />
                         </button>
                     </div>
-
                 </div>
 
                 <!-- Right: Product Info -->
@@ -100,19 +114,22 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
 
                         <div class="mb-5 flex items-center gap-4 text-2xl font-semibold">
                             <span class="text-gray-900">{{ product.price - product.discount_price }} TK</span>
-                            <span class="text-lg font-normal text-gray-400 line-through"> {{ product.price.toFixed(2) }}
-                                TK </span>
+                            <span class="text-lg font-normal text-gray-400 line-through"> {{ product.price.toFixed(2) }} TK </span>
                             <span class="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
                                 Save {{ Math.round((product.discount_price / product.price) * 100) }}%
                             </span>
                         </div>
 
-                        <div class="mb-6 flex flex-wrap gap-2">
-                            <span v-for="(tag, index) in tagList" :key="index"
-                                class="rounded-full bg-blue-200 px-3 py-1 text-xs font-medium text-gray-700 uppercase">
+                        <div class="mb-6 flex flex-wrap gap-2" v-if="tagsArray && tagsArray.length">
+                            <span
+                                v-for="(tag, index) in tagsArray"
+                                :key="index"
+                                class="rounded-full bg-blue-200 px-3 py-1 text-xs font-medium text-gray-700 uppercase"
+                            >
                                 {{ tag.trim() }}
                             </span>
                         </div>
+                        <div v-else class="text-sm text-gray-400 italic">No tags available</div>
 
                         <p class="mb-8 text-justify text-base leading-relaxed text-gray-700">
                             {{ product.description }}
@@ -125,8 +142,7 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
                                 <li><strong class="text-gray-800">Length:</strong> {{ product.length }}</li>
                                 <li><strong class="text-gray-800">Width:</strong> {{ product.width }}</li>
                                 <li><strong class="text-gray-800">Height:</strong> {{ product.height }}</li>
-                                <li><strong class="text-gray-800">Specifications:</strong> {{ product.specifications }}
-                                </li>
+                                <li><strong class="text-gray-800">Specifications:</strong> {{ product.specifications }}</li>
                             </ul>
                         </div>
                     </div>
@@ -137,18 +153,22 @@ const tagList = computed(() => props.product.tags.split(',').map((tag) => tag.tr
                         >
                             Add to Cart
                         </button> -->
-                        <button @click="addToCart(product)"
-                            class="flex w-full items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 sm:w-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6H19m-9 0a1 1 0 100 2 1 1 0 000-2zm6 0a1 1 0 100 2 1 1 0 000-2z" />
+                        <button
+                            @click="addToCart(product)"
+                            class="flex w-full items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6H19m-9 0a1 1 0 100 2 1 1 0 000-2zm6 0a1 1 0 100 2 1 1 0 000-2z"
+                                />
                             </svg>
                             Add to Cart
                         </button>
 
-                        <p class="text-sm text-gray-600 select-none"><span class="font-medium text-gray-800">In
-                                stock:</span> 20</p>
+                        <p class="text-sm text-gray-600 select-none"><span class="font-medium text-gray-800">In stock:</span> 20</p>
                     </div>
                 </div>
             </div>

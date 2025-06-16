@@ -18,21 +18,24 @@ class OrderController extends Controller
      */
     public function index()
     {
-         $user = auth()->user();
-         $cartItems = $user->cartItems()->with('product.images')->get();
+        $user = auth()->user();
+
+        $cartItems = $user->cartItems()->with('product.images')->get();
 
         $totalPrice = $cartItems->sum(function ($item) {
             $product = $item->product;
 
-            // Use discount_price if available, otherwise use price
-            $unitPrice = $product->discount_price ?? $product->price;
+            // Use discount_price if > 0, else use original price
+            $unitPrice = ($product->discount_price > 0) ? $product->discount_price : $product->price;
 
             return $unitPrice * $item->quantity;
         });
+
         return Inertia::render('client_pages/Order', [
-            'cartItems' => $cartItems,
-            'totalPrice' => $totalPrice,
+            'cartItems'   => $cartItems,
+            'totalPrice'  => $totalPrice,
         ]);
+
     }
 
     /**
@@ -50,12 +53,13 @@ class OrderController extends Controller
     {
         $user = $request->user(); // better than auth()->user()
         
-        
+        // dd($request->all());
         $order = Order::create([
         'user_id' => $user->id,
         'status' => 'pending',
         'total_price' => $request->total,
         'payment_method' => $request->payment_method,
+        'payment_status' => 'Unpaid',
         ]);
 
 
@@ -101,7 +105,15 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+          $order->load([
+        'orderItems.product',
+        'shippingAddress',
+        'payment',
+    ]);
+
+    return Inertia::render('client_pages/OrderDetails', [
+        'order' => $order,
+    ]);
     }
 
     /**

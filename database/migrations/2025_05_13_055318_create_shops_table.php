@@ -15,7 +15,8 @@ return new class extends Migration
             
             $table->uuid('id')->primary();                   // UUID primary key
             $table->string('name');
-            $table->string('slug')->unique();  // Ensure slug is unique
+            $table->string('logo')->nullable(); // store logo
+            $table->string('slug')->unique(); 
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

@@ -20,5 +20,26 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'role' => 'admin',
         ]);
+
+        $this->call([
+            SliderSeeder::class,
+                ]);
+
+        $this->call([
+            ShopSeeder::class,
+        ]);
+
+
+         $this->call([
+            CategorySeeder::class,
+        ]);
+         $this->call([
+            BrandSeeder::class,
+        ]);
+         $this->call([
+            ProductSeeder::class,
+        ]);
+        $this->call(ProductImageSeeder::class);
+
     }
 }
