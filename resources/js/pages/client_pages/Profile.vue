@@ -190,7 +190,7 @@
             </div>
 
             <!-- Tab: Addresses -->
-            <div v-else-if="activeTab === 'addresses'">
+            <div v-else-if="activeTab === 'addresse'">
                 <h3 class="mb-4 text-xl font-bold text-gray-800">📍 Saved Addresses</h3>
                 <div class="space-y-4">
                     <div class="rounded-lg border p-4 shadow-sm">
@@ -200,18 +200,7 @@
                 </div>
             </div>
 
-            <!-- Tab: Wishlist -->
-            <div v-else-if="activeTab === 'wishlist'">
-                <h3 class="mb-4 text-xl font-bold text-gray-800">💖 Wishlist</h3>
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                    <div v-for="item in wishlist" :key="item.id" class="rounded-lg border bg-white p-4 shadow hover:shadow-md">
-                        <img :src="item.image" alt="" class="mb-3 h-32 w-full rounded-md object-cover" />
-                        <h4 class="font-medium text-gray-800">{{ item.name }}</h4>
-                        <p class="mb-2 text-sm text-gray-500">${{ item.price }}</p>
-                        <button class="text-sm text-indigo-600 hover:underline">View Product</button>
-                    </div>
-                </div>
-            </div>
+           
         </div>
     </AppLayout>
 </template>
@@ -238,8 +227,7 @@ const showEditForm = ref(false);
 const tabs = [
     { key: 'orders', label: 'Orders' },
     { key: 'profile', label: 'Profile Info' },
-    { key: 'addresses', label: 'Addresses' },
-    { key: 'wishlist', label: 'Wishlist' },
+    { key: 'addresse', label: 'Addresse' },
 ];
 
 const wishlist = [

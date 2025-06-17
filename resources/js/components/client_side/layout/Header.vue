@@ -13,7 +13,9 @@ import {
     ShoppingCartIcon,
     UserCircleIcon,
     XMarkIcon,
+    Cog6ToothIcon, // ✅ This is the settings icon
 } from '@heroicons/vue/24/outline';
+
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
@@ -113,6 +115,10 @@ function closeAll() {
                             <Link :href="route('profiles.index')" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50" @click="profileMenuOpen = false">
                                 <UserCircleIcon class="h-5 w-5" />
                                 Profile
+                            </Link>
+                            <Link :href="route('profiles.create')" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50" @click="profileMenuOpen = false">
+                                <Cog6ToothIcon class="h-5 w-5" />
+                                Change Password
                             </Link>
                             <Link
                                 href="/logout"

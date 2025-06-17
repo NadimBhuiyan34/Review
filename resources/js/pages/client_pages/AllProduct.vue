@@ -202,7 +202,7 @@
 
 <script setup>
 import AppLayout from '@/Layouts/ClientLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, Link } from '@inertiajs/vue3';
 import debounce from 'lodash/debounce';
 import { ref } from 'vue';
 

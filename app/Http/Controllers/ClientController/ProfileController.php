@@ -36,7 +36,7 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('client_pages/settings/Password');
     }
 
     /**

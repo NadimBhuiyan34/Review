@@ -2,13 +2,12 @@
   <Head title="Checkout" />
   <AppLayout>
     <div class="px-4 py-10 sm:px-6 lg:px-8 max-w-[1550px] mx-auto my-5">
-      <div class="mx-auto ">
+      <div class="mx-auto">
         <!-- STEP 1: Order Summary -->
         <div v-if="step === 'summary'" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-          <!-- <h2 class="mb-5 text-center items-center gap-2 text-xl font-semibold text-green-700"></h2> -->
-            <h1 class="text-4xl font-extrabold text-gray-800 mb-10 text-center">
-          🛒 Order Summary
-        </h1>
+          <h1 class="text-4xl font-extrabold text-gray-800 mb-10 text-center">
+            🛒 Order Summary
+          </h1>
           <div class="scrollbar-thin scrollbar-thumb-gray-300 max-h-64 space-y-4 overflow-y-auto pr-1">
             <div
               v-for="(item, index) in cartItems"
@@ -25,11 +24,25 @@
             </div>
           </div>
 
-          <div class="mt-6 flex justify-between border-t pt-4 text-base font-semibold text-gray-800">
-            <span>Total:</span>
-            <span class="text-red-600">{{ cartTotal }} TK</span>
+          <!-- Cost Breakdown -->
+          <div class="mt-6 space-y-2 text-base font-medium text-gray-800 border-t pt-4">
+            <div class="flex justify-between">
+              <span>Subtotal:</span>
+              <span>{{ cartTotal }} TK</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Shipping Fee:</span>
+              <span>{{ SHIPPING_FEE }} TK</span>
+            </div>
+            <div class="flex justify-between">
+              <span>System Fee:</span>
+              <span>{{ SYSTEM_FEE }} TK</span>
+            </div>
+            <div class="flex justify-between font-semibold text-red-600 pt-2 border-t">
+              <span>Total:</span>
+              <span>{{ finalTotal }} TK</span>
+            </div>
           </div>
-          <hr class="my-4">
 
           <div class="mt-6 text-right">
             <button
@@ -43,11 +56,10 @@
 
         <!-- STEP 2: Shipping Form -->
         <div v-else-if="step === 'shipping'" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-          <!-- <h2 class="mb-5 text-center items-center gap-2 text-xl font-semibold text-blue-700">📦 Shipping Information</h2> -->
-              <h1 class="text-4xl font-extrabold text-gray-800 mb-10 text-center">
-          📦 Shipping Information
-        </h1>
-          
+          <h1 class="text-4xl font-extrabold text-gray-800 mb-10 text-center">
+            📦 Shipping Information
+          </h1>
+
           <form @submit.prevent="placeOrder" class="space-y-5" novalidate>
             <!-- Full Name -->
             <div>
@@ -147,7 +159,7 @@
               <button
                 @click.prevent="step = 'summary'"
                 type="button"
-                class="rounded-full border border-gray-400 px-6 py-3 font-semibold text-gray-700  hover:bg-gray-100"
+                class="rounded-full border border-gray-400 px-6 py-3 font-semibold text-gray-700 hover:bg-gray-100"
               >
                 ⬅️ Back to Summary
               </button>
@@ -177,9 +189,14 @@ const props = defineProps({
   totalPrice: Number,
 });
 
+// Constants
+const SHIPPING_FEE = 100;
+const SYSTEM_FEE = 20;
+
 // Step state
 const step = ref('summary'); // 'summary' or 'shipping'
 
+// Subtotal only
 const cartTotal = computed(() =>
   props.cartItems.reduce(
     (sum, item) =>
@@ -187,6 +204,9 @@ const cartTotal = computed(() =>
     0
   )
 );
+
+// Final total including fees
+const finalTotal = computed(() => cartTotal.value + SHIPPING_FEE + SYSTEM_FEE);
 
 // Form setup
 const form = useForm({
@@ -197,10 +217,8 @@ const form = useForm({
   phone: '',
   payment_method: '',
   cart: props.cartItems,
-  total: cartTotal,
+  total: finalTotal,
 });
-
-// Total calculation
 
 // Order submission
 const placeOrder = () => {
@@ -208,17 +226,16 @@ const placeOrder = () => {
     onSuccess: () => {
       alert('Order placed!');
       form.reset();
-      step.value = 'summary'; // or redirect as needed
+      step.value = 'summary';
     },
     onError: () => {
-      
+      // Error handling
     },
   });
 };
 </script>
 
 <style scoped>
-/* Optional scrollbar style */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }

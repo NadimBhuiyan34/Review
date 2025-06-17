@@ -105,11 +105,17 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-          $order->load([
-        'orderItems.product',
-        'shippingAddress',
-        'payment',
-    ]);
+         $order->load([
+                'orderItems.product.images' => function ($query) {
+                    $query->where('is_featured', true)->limit(1);
+                },
+                'shippingAddress',
+                'payment',
+                'user' => function ($query) {
+                    $query->select('id', 'name', 'email'); // You must include 'id' if it's a foreign key
+                },
+            ]);
+
 
     return Inertia::render('client_pages/OrderDetails', [
         'order' => $order,
