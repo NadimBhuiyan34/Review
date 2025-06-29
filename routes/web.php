@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController\CategoryController;
 use App\Http\Controllers\AdminController\ProductController;
 use App\Http\Controllers\AdminController\ProductImageController;
 use App\Http\Controllers\AdminController\SliderController;
+use App\Http\Controllers\AdminController\AdminOrderController;
 use App\Http\Controllers\ClientController\HomeController;
 use App\Http\Controllers\ClientController\CartController;
 use App\Http\Controllers\ClientController\OrderController;
@@ -65,6 +66,7 @@ Route::resource('brands', BrandController::class);
 Route::resource('products', ProductController::class);
 Route::resource('shops', ShopController::class);
 Route::resource('product_images', ProductImageController::class);
+Route::resource('admin_orders', AdminOrderController::class);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

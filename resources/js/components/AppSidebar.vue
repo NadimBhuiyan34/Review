@@ -41,21 +41,26 @@ const mainNavItems: NavItem[] = [
         href: '/products',
         icon: ShoppingBag,
     },
+    {
+        title: 'Order',
+        href: '/admin_orders',
+        icon: ShoppingBag,
+    },
 
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
-];
+// const footerNavItems: NavItem[] = [
+//     {
+//         title: 'Github Repo',
+//         href: 'https://github.com/laravel/vue-starter-kit',
+//         icon: Folder,
+//     },
+//     {
+//         title: 'Documentation',
+//         href: 'https://laravel.com/docs/starter-kits#vue',
+//         icon: BookOpen,
+//     },
+// ];
 </script>
 
 <template>
@@ -64,8 +69,9 @@ const footerNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="route('dashboard')">
-                        <AppLogo />
+                        <Link :href="route('dashboard')" class="text-3xl font-extrabold tracking-tight">
+                            <span class="bg-gradient-to-r from-blue-700 to-purple-500 bg-clip-text text-transparent">Review</span>
+                             <span class="text-red-500">Hub</span>
                         </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
