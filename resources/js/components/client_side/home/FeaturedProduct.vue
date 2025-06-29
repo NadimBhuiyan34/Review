@@ -21,7 +21,7 @@
                     <div class="relative h-72 w-full overflow-hidden">
                         <img
                             v-if="getFeaturedImage(product)"
-                            :src="`/storage/${getFeaturedImage(product).image_path}`"
+                            :src="getFeaturedImage(product).image_path"
                             :alt="product.name"
                             class="clip-custom h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                             loading="lazy"

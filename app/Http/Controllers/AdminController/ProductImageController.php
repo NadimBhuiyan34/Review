@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateProductImageRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductImageController extends Controller
 {
@@ -35,20 +36,27 @@ class ProductImageController extends Controller
 
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'image' => 'required|image|max:2048',
+            'image' => 'required|image|max:2048',  // max 2MB
             'is_featured' => 'nullable|boolean',
         ]);
 
+        // Find the product by ID
         $product = Product::findOrFail($request->input('product_id'));
 
+        // Store the image on the 'public' disk inside 'products' folder
         $path = $request->file('image')->store('products', 'public');
 
+        // Generate full absolute URL to the stored image
+        $fullUrl = url(Storage::url($path));  // e.g. https://yourdomain.com/storage/products/filename.jpg
+
+        // If this image is featured, reset all other featured images for this product
         if ($request->boolean('is_featured')) {
             $product->images()->update(['is_featured' => false]);
         }
 
+        // Save the image record with the full URL path
         $product->images()->create([
-            'image_path' => $path,
+            'image_path' => $fullUrl,
             'is_featured' => $request->boolean('is_featured'),
         ]);
 

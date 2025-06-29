@@ -8,23 +8,33 @@ use Illuminate\Support\Str;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Category;
+use App\Models\Brand;
+use App\Models\Shop;
+
 
 class DarazScraperController extends Controller
 {
-    public function scrape()
+    public function scrape(Request $request)
     {
-        // Get an existing category UUID
-        $category = Category::first();
-        if (!$category) {
-            return response()->json(['error' => 'No categories found. Please add a category first.'], 500);
-        }
-        $categoryId = $category->id;
+        // Get search query or default
+        $searchQuery = $request->input('q', 'iphone');
 
+        // Get category/brand/shop names from request or use default strings
+        $categoryName = $request->input('category');
+        $brandName = $request->input('brand');
+        $shopName = $request->input('shop');
+
+        // Find or create category, brand, shop
+        $category = Category::firstOrCreate(['name' => $categoryName], ['slug' => Str::slug($categoryName)]);
+        $brand = Brand::firstOrCreate(['name' => $brandName], ['slug' => Str::slug($brandName)]);
+        $shop = Shop::firstOrCreate(['name' => $shopName], ['slug' => Str::slug($shopName)]);
+
+        // Scrape data from Daraz
         $response = Http::withHeaders([
-            'User-Agent' => 'Mozilla/5.0', // Mimic browser
+            'User-Agent' => 'Mozilla/5.0',
         ])->get('https://www.daraz.com.bd/catalog/', [
             'ajax' => 'true',
-            'q' => 'iphone',
+            'q' => $searchQuery,
             'page' => 1,
         ]);
 
@@ -41,24 +51,25 @@ class DarazScraperController extends Controller
             $title = $item['name'] ?? 'Unnamed Product';
             $slug = Str::slug($title);
 
-            // Skip if product with similar slug exists
-            $exists = Product::where('slug', 'LIKE', $slug . '%')->exists();
-            if ($exists) {
+            if (Product::where('slug', 'LIKE', $slug . '%')->exists()) {
                 $skipped++;
                 continue;
             }
 
+            $rawPrice = $item['priceShow'] ?? '0';
+            $cleanPrice = preg_replace('/[^\d\.]/', '', $rawPrice);
+            $price = $cleanPrice !== '' ? (float)$cleanPrice : 0.0;
+
             $product = Product::create([
                 'name' => $title,
                 'description' => null,
-                'price' => (float) str_replace(',', '', $item['priceShow'] ?? 0),
-                'discount_price' => (float) str_replace(',', '', $item['priceShow'] ?? 0),
+                'price' => $price,
                 'stock' => 100,
                 'is_featured' => true,
                 'is_active' => true,
-                'category_id' => $categoryId,
-                'brand_id' => null,
-                'shop_id' => null,
+                'category_id' => $category->id,
+                'brand_id' => $brand->id,
+                'shop_id' => $shop->id,
                 'tags' => ['daraz'],
                 'specifications' => ['source' => 'Daraz'],
                 'status' => true,

@@ -75,7 +75,7 @@ const tagsArray = computed(() => {
                 <div class="flex flex-col gap-6 lg:w-1/2">
                     <div class="cursor-pointer overflow-hidden rounded-2xl border border-gray-200 transition-shadow duration-400 hover:shadow-md">
                         <img
-                            :src="mainImage?.image_path ? `/storage/${mainImage.image_path}` : '/images/fallback.jpg'"
+                            :src="mainImage.image_path"
                             alt="Main Product Image"
                             class="h-[520px] w-full rounded-2xl object-cover transition-transform duration-300 hover:scale-105"
                         />
@@ -92,7 +92,7 @@ const tagsArray = computed(() => {
                             ]"
                         >
                             <img
-                                :src="`/storage/${img.image_path}`"
+                                :src="img.image_path"
                                 alt="Thumbnail"
                                 class="h-full w-full object-cover"
                                 @error="(event) => (event.target.src = '/images/fallback-thumb.jpg')"
