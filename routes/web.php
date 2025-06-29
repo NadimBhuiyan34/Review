@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminController\ShopController;
 use App\Http\Controllers\ClientController\ReviewController;
 use App\Http\Controllers\ClientController\WhishListController;
 use App\Http\Controllers\ClientController\ProfileController;
+use App\Http\Controllers\DarazScraperController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -67,6 +68,10 @@ Route::resource('products', ProductController::class);
 Route::resource('shops', ShopController::class);
 Route::resource('product_images', ProductImageController::class);
 Route::resource('admin_orders', AdminOrderController::class);
+
+
+
+Route::get('/scrape-daraz', [DarazScraperController::class, 'scrape']);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
