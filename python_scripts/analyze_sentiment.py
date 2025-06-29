@@ -2,34 +2,29 @@ import sys
 from textblob import TextBlob
 
 def analyze_sentiment(review_text):
-    # Perform sentiment analysis using TextBlob
     blob = TextBlob(review_text)
-    polarity = blob.sentiment.polarity  # Sentiment score (-1 to 1)
-    
-    # Define thresholds for neutral sentiment
-    neutral_threshold = 0.1  # Adjust this for sensitivity
+    polarity = blob.sentiment.polarity
 
-    # Determine sentiment label based on polarity
-    if polarity > neutral_threshold:
-        sentiment = "Positive"
-    elif polarity < -neutral_threshold:
-        sentiment = "Negative"
+    positive_threshold = 0.1
+    negative_threshold = -0.1
+    fuzzy_margin = 0.1  # wider margin for fuzzy classification
+
+    if polarity > positive_threshold + fuzzy_margin:
+        return "Positive"
+    elif polarity < negative_threshold - fuzzy_margin:
+        return "Negative"
+    elif (positive_threshold - fuzzy_margin) <= polarity <= (positive_threshold + fuzzy_margin):
+        return "Fuzzy Positive"
+    elif (negative_threshold - fuzzy_margin) <= polarity <= (negative_threshold + fuzzy_margin):
+        return "Fuzzy Negative"
     else:
-        sentiment = "Neutral"
-    
-    return sentiment
+        return "Neutral"
 
 if __name__ == "__main__":
-    # Check if input is provided
     if len(sys.argv) < 2:
         print("Error: Please provide a review as a command-line argument.")
         sys.exit(1)
-    
-    # Get review text from command-line arguments
+
     review_text = sys.argv[1]
-    
-    # Analyze sentiment
     sentiment = analyze_sentiment(review_text)
-    
-    # Print the result
     print(sentiment)

@@ -17,8 +17,6 @@
       <div v-if="showForm" class="rounded-2xl bg-white p-6 shadow-md space-y-6">
         <h2 class="text-xl font-semibold text-gray-700">Write a Review</h2>
         <form @submit.prevent="submitReview" class="space-y-4">
-
-
           <div>
             <label class="block text-sm font-medium text-gray-700">Your Review</label>
             <textarea v-model="form.comment" rows="4"
@@ -58,14 +56,18 @@
             <span>{{ value }}%</span>
           </div>
           <div class="h-3 w-full overflow-hidden rounded-full" :class="{
-            'bg-green-100': label === 'Good',
+            'bg-green-100': label === 'Positive',
+            'bg-lime-100': label === 'Fuzzy Positive',
             'bg-yellow-100': label === 'Neutral',
-            'bg-red-100': label === 'Bad',
+            'bg-amber-100': label === 'Fuzzy Negative',
+            'bg-red-100': label === 'Negative',
           }">
             <div class="h-full rounded-full transition-all duration-500" :class="{
-              'bg-green-500': label === 'Good',
+              'bg-green-500': label === 'Positive',
+              'bg-lime-500': label === 'Fuzzy Positive',
               'bg-yellow-500': label === 'Neutral',
-              'bg-red-500': label === 'Bad',
+              'bg-amber-500': label === 'Fuzzy Negative',
+              'bg-red-500': label === 'Negative',
             }" :style="{ width: value + '%' }"></div>
           </div>
         </div>
@@ -78,9 +80,11 @@
             ? 'bg-blue-600 text-white shadow'
             : 'bg-gray-100 text-gray-700 hover:bg-gray-200']">
           <span :class="{
-            'text-green-500': option === 'Good',
+            'text-green-500': option === 'Positive',
+            'text-lime-500': option === 'Fuzzy Positive',
             'text-yellow-500': option === 'Neutral',
-            'text-red-500': option === 'Bad',
+            'text-amber-500': option === 'Fuzzy Negative',
+            'text-red-500': option === 'Negative',
             'text-blue-500': option === 'All',
           }">
             ●
@@ -112,7 +116,9 @@
 
               <span :class="{
                 'text-green-600': review.sentiment_type === 'Positive',
+                'text-lime-600': review.sentiment_type === 'Fuzzy Positive',
                 'text-yellow-500': review.sentiment_type === 'Neutral',
+                'text-amber-600': review.sentiment_type === 'Fuzzy Negative',
                 'text-red-600': review.sentiment_type === 'Negative',
               }" class="text-sm font-medium">
                 {{ review.sentiment_type }}
@@ -142,14 +148,13 @@ const props = defineProps({
 })
 
 const showForm = ref(false)
-const filters = ['All', 'Positive', 'Neutral', 'Negative']
+const filters = ['All', 'Positive', 'Fuzzy Positive', 'Neutral', 'Fuzzy Negative', 'Negative']
 const selectedFilter = ref('All')
 
 // Reactive reviews list
 const reviews = ref([...props.reviews])
 
 const form = ref({
-
   product_id: props.product_id,
   slug: props.product_slug,
   comment: '',
@@ -168,7 +173,6 @@ const submitReview = () => {
   })
 }
 
-
 const filteredReviews = computed(() => {
   if (selectedFilter.value === 'All') return reviews.value
   return reviews.value.filter(r => r.sentiment_type === selectedFilter.value)
@@ -177,15 +181,18 @@ const filteredReviews = computed(() => {
 const sentimentSummary = computed(() => {
   const total = reviews.value.length
   const counts = {
-    Good: reviews.value.filter(r => r.sentiment_type === 'Positive').length,
+    Positive: reviews.value.filter(r => r.sentiment_type === 'Positive').length,
+    'Fuzzy Positive': reviews.value.filter(r => r.sentiment_type === 'Fuzzy Positive').length,
     Neutral: reviews.value.filter(r => r.sentiment_type === 'Neutral').length,
-    Bad: reviews.value.filter(r => r.sentiment_type === 'Negative').length
+    'Fuzzy Negative': reviews.value.filter(r => r.sentiment_type === 'Fuzzy Negative').length,
+    Negative: reviews.value.filter(r => r.sentiment_type === 'Negative').length,
   }
 
-  return {
-    Good: total ? Math.round((counts.Good / total) * 100) : 0,
-    Neutral: total ? Math.round((counts.Neutral / total) * 100) : 0,
-    Bad: total ? Math.round((counts.Bad / total) * 100) : 0
-  }
+  return Object.fromEntries(
+    Object.entries(counts).map(([key, count]) => [
+      key,
+      total ? Math.round((count / total) * 100) : 0,
+    ])
+  )
 })
 </script>
