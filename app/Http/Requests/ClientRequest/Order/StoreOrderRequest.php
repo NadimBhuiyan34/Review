@@ -30,7 +30,7 @@ class StoreOrderRequest extends FormRequest
         'phone' => 'required|string|max:20',
 
         // Order & cart
-        'payment_method' => 'required|in:cod,card,bkash',
+        'payment_method' => 'required|in:Cash on Delivery,Card,Bkash',
         'cart' => 'required|array|min:1',
         'cart.*.product.id' => 'required|exists:products,id',
         'cart.*.quantity' => 'required|integer|min:1',

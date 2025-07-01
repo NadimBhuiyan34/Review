@@ -85,9 +85,9 @@ const shippingFields = {
 
 const paymentMethod = ref('');
 const paymentMethods = [
-    { value: 'cod', label: 'Cash on Delivery', icon: '💵' },
-    { value: 'card', label: 'Credit / Debit Card', icon: '💳' },
-    { value: 'bkash', label: 'bKash', icon: '📱' },
+    { value: 'Cash on Delivery', label: 'Cash on Delivery', icon: '💵' },
+    { value: 'Card', label: 'Credit / Debit Card', icon: '💳' },
+    { value: 'BKash', label: 'BKash', icon: '📱' },
 ];
 
 const submitForm = () => {

@@ -158,13 +158,13 @@
                                         {{ order.payment_status }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-center">
+                                <td class="space-x-3 px-4 py-3 text-center">
+                                    <!-- View Order Details -->
                                     <Link
                                         :href="route('orders.show', order.id)"
                                         class="text-indigo-600 hover:text-indigo-800"
                                         title="View Order Details"
                                     >
-                                   
                                         <!-- Magnifying glass SVG icon -->
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -182,6 +182,31 @@
                                         </svg>
                                         View
                                     </Link>
+
+                                    <!-- Delete Order - only show if order.status is 'Pending' -->
+                                    <button
+                                        v-if="order.status === 'Pending'"
+                                        @click="confirmDelete(order.id)"
+                                        class="text-red-600 hover:text-red-800"
+                                        title="Delete Order"
+                                    >
+                                        <!-- Trash SVG icon -->
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="inline-block h-5 w-5"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4"
+                                            />
+                                        </svg>
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -199,17 +224,15 @@
                     </div>
                 </div>
             </div>
-
-           
         </div>
     </AppLayout>
 </template>
 
 <script setup>
 import AppLayout from '@/Layouts/ClientLayout.vue';
-import { Head, useForm, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
-
+import { router } from '@inertiajs/vue3';
 const props = defineProps({
     orders: {
         type: Array,
@@ -273,6 +296,14 @@ const submit = () => {
         },
     });
 };
+
+const confirmDelete = (id: number) => {
+  if (confirm('Are you sure you want to delete this order?')) {
+    router.delete(route('orders.destroy', id));
+  }
+};
+
+
 
 // Date formatter utility
 function formatDate(dateStr) {

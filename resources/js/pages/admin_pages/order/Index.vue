@@ -109,12 +109,12 @@ const breadcrumbs: BreadcrumbItem[] = [
                   <Eye class="w-4 h-4 mr-1" />
                   <span class="hidden sm:inline">Show</span>
                 </Link>
-                <Link :href="`/orders/${order.id}/edit`"
+                <Link :href="`/admin_orders/${order.id}/edit`"
                   class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition">
                   <PenLine class="w-4 h-4 mr-1" />
                   <span class="hidden sm:inline">Edit</span>
                 </Link>
-                <Link :href="`/orders/${order.id}`" method="delete" as="button"
+                <Link :href="`/admin_orders/${order.id}`" method="delete" as="button"
                   class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition">
                   <Trash2 class="w-4 h-4 mr-1" />
                   <span class="hidden sm:inline">Delete</span>

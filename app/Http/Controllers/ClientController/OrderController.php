@@ -56,7 +56,7 @@ class OrderController extends Controller
         // dd($request->all());
         $order = Order::create([
         'user_id' => $user->id,
-        'status' => 'pending',
+        'status' => 'Pending',
         'total_price' => $request->total,
         'payment_method' => $request->payment_method,
         'payment_status' => 'Unpaid',
@@ -117,9 +117,9 @@ class OrderController extends Controller
             ]);
 
 
-    return Inertia::render('client_pages/OrderDetails', [
-        'order' => $order,
-    ]);
+        return Inertia::render('client_pages/OrderDetails', [
+            'order' => $order,
+        ]);
     }
 
     /**
@@ -127,7 +127,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        
     }
 
     /**
@@ -143,6 +143,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        
+         $order->delete();
+
+        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
     }
 }

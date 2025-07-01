@@ -148,9 +148,9 @@
                 required
               >
                 <option disabled value="">Select a payment method</option>
-                <option value="cod">Cash on Delivery</option>
-                <option value="card">Credit/Debit Card</option>
-                <option value="bkash">bKash</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
+                <option value="Card">Credit/Debit Card</option>
+                <option value="Bkash">Bkash</option>
               </select>
               <p v-if="form.errors.payment_method" id="payment_method-error" class="mt-1 text-sm text-red-600">{{ form.errors.payment_method }}</p>
             </div>

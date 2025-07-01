@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Inertia\Inertia;
+use App\Http\Requests\AdminRequest\Order\UpdateOrderRequest;
 
 class AdminOrderController extends Controller
 {
@@ -76,15 +77,51 @@ class AdminOrderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
+       
+        // Find the order first
+            $order = Order::with([
+                'orderItems.product.images' => function ($query) {
+                    $query->where('is_featured', true)->limit(1);
+                },
+                'shippingAddress',
+                'payment',
+                'user' => function ($query) {
+                    $query->select('id', 'name', 'email'); 
+                },
+            ])->findOrFail($id);
+
+            return Inertia::render('admin_pages/order/Edit', [
+                'order' => $order,
+            ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateOrderRequest $request, string $id)
     {
-        //
+         // Find order with relationships
+            $order = Order::with('shippingAddress')->findOrFail($id);
+
+            // Update order fields
+            $order->update([
+                'status' => $request->input('status'),
+                'payment_method' => $request->input('payment_method'),
+                'payment_status' => $request->input('payment_status'),
+            ]);
+
+            // Update related shipping address
+            $order->shippingAddress()->update([
+                'name' => $request->input('shipping.name'),
+                'phone' => $request->input('shipping.phone'),
+                'address' => $request->input('shipping.address'),
+                'city' => $request->input('shipping.city'),
+                'postal_code' => $request->input('shipping.postal_code'),
+            ]);
+
+            return redirect()->route('admin_orders.index')
+                ->with('success', 'Order updated successfully.');
     }
 
     /**
@@ -92,6 +129,11 @@ class AdminOrderController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $order->delete();
+
+        return redirect()->route('admin_orders.index')
+            ->with('success', 'Order deleted successfully.');
     }
+
 }

@@ -203,7 +203,7 @@ const breadcrumbs: BreadcrumbItem[] = [{ title: 'Orders', href: '/admin_orders' 
                                 <!-- Product Image -->
                                 <div class="shrink-0">
                                     <img
-                                        :src="`/storage/${item.product.images[0]?.image_path}`"
+                                        :src="item.product.images[0]?.image_path"
                                         alt="Product Image"
                                         class="h-16 w-16 rounded-lg border border-gray-300 object-cover shadow-sm transition group-hover:scale-[1.03]"
                                         loading="lazy"
