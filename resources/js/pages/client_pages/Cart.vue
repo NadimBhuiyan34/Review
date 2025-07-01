@@ -15,7 +15,7 @@
                         <!-- Product Info -->
                         <div class="flex w-full items-center gap-5 sm:w-1/2">
                             <img
-                                :src="`/storage/${item.image}`"
+                                :src="item.image"
                                 :alt="item.name"
                                 class="h-24 w-24 rounded-xl border border-gray-200 object-cover shadow-sm transition-transform duration-200 group-hover:scale-105"
                             />
