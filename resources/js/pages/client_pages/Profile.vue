@@ -297,11 +297,7 @@ const submit = () => {
     });
 };
 
-const confirmDelete = (id: number) => {
-  if (confirm('Are you sure you want to delete this order?')) {
-    router.delete(route('orders.destroy', id));
-  }
-};
+ 
 
 
 
