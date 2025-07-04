@@ -7,16 +7,11 @@ def analyze_sentiment(review_text):
 
     positive_threshold = 0.1
     negative_threshold = -0.1
-    fuzzy_margin = 0.1  # wider margin for fuzzy classification
 
-    if polarity > positive_threshold + fuzzy_margin:
+    if polarity > positive_threshold:
         return "Positive"
-    elif polarity < negative_threshold - fuzzy_margin:
+    elif polarity < negative_threshold:
         return "Negative"
-    elif (positive_threshold - fuzzy_margin) <= polarity <= (positive_threshold + fuzzy_margin):
-        return "Fuzzy Positive"
-    elif (negative_threshold - fuzzy_margin) <= polarity <= (negative_threshold + fuzzy_margin):
-        return "Fuzzy Negative"
     else:
         return "Neutral"
 

@@ -57,16 +57,16 @@
           </div>
           <div class="h-3 w-full overflow-hidden rounded-full" :class="{
             'bg-green-100': label === 'Positive',
-            'bg-lime-100': label === 'Fuzzy Positive',
+          
             'bg-yellow-100': label === 'Neutral',
-            'bg-amber-100': label === 'Fuzzy Negative',
+          
             'bg-red-100': label === 'Negative',
           }">
             <div class="h-full rounded-full transition-all duration-500" :class="{
               'bg-green-500': label === 'Positive',
-              'bg-lime-500': label === 'Fuzzy Positive',
+    
               'bg-yellow-500': label === 'Neutral',
-              'bg-amber-500': label === 'Fuzzy Negative',
+           
               'bg-red-500': label === 'Negative',
             }" :style="{ width: value + '%' }"></div>
           </div>
@@ -81,9 +81,7 @@
             : 'bg-gray-100 text-gray-700 hover:bg-gray-200']">
           <span :class="{
             'text-green-500': option === 'Positive',
-            'text-lime-500': option === 'Fuzzy Positive',
             'text-yellow-500': option === 'Neutral',
-            'text-amber-500': option === 'Fuzzy Negative',
             'text-red-500': option === 'Negative',
             'text-blue-500': option === 'All',
           }">
@@ -116,9 +114,7 @@
 
               <span :class="{
                 'text-green-600': review.sentiment_type === 'Positive',
-                'text-lime-600': review.sentiment_type === 'Fuzzy Positive',
                 'text-yellow-500': review.sentiment_type === 'Neutral',
-                'text-amber-600': review.sentiment_type === 'Fuzzy Negative',
                 'text-red-600': review.sentiment_type === 'Negative',
               }" class="text-sm font-medium">
                 {{ review.sentiment_type }}
@@ -148,7 +144,7 @@ const props = defineProps({
 })
 
 const showForm = ref(false)
-const filters = ['All', 'Positive', 'Fuzzy Positive', 'Neutral', 'Fuzzy Negative', 'Negative']
+const filters = ['All', 'Positive','Neutral','Negative']
 const selectedFilter = ref('All')
 
 // Reactive reviews list
@@ -182,9 +178,7 @@ const sentimentSummary = computed(() => {
   const total = reviews.value.length
   const counts = {
     Positive: reviews.value.filter(r => r.sentiment_type === 'Positive').length,
-    'Fuzzy Positive': reviews.value.filter(r => r.sentiment_type === 'Fuzzy Positive').length,
     Neutral: reviews.value.filter(r => r.sentiment_type === 'Neutral').length,
-    'Fuzzy Negative': reviews.value.filter(r => r.sentiment_type === 'Fuzzy Negative').length,
     Negative: reviews.value.filter(r => r.sentiment_type === 'Negative').length,
   }
 
